@@ -9,7 +9,7 @@ from enum import Enum
 import json
 import os
 
-from decentralized_control.msg import Task, TaskList, TaskAssignment
+from dec_control.msg import Task, TaskList, TaskAssignment
 
 class AllocationMethod(Enum):
     """Enumeration of the allocation methods used for comparison."""

@@ -11,7 +11,7 @@ import os
 import json
 from collections import defaultdict
 
-from decentralized_control.msg import (
+from dec_control.msg import (
     Task, TaskList, TaskAssignment, RobotState,
     CollaborationRequest, CollaborationResponse, SynchronizationSignal
 )

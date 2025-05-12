@@ -8,7 +8,7 @@ import time
 from threading import Lock
 import queue
 from std_msgs.msg import Float64MultiArray
-from decentralized_control.msg import RobotState, NetworkTopology
+from dec_control.msg import RobotState, NetworkTopology
 
 class CommunicationMiddleware(Node):
     """Simulates network conditions and handles message delivery."""

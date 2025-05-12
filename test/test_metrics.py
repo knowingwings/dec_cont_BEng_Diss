@@ -8,8 +8,8 @@ import os
 import json
 from threading import Thread
 
-from decentralized_control.metrics_collector import MetricsCollector
-from decentralized_control.msg import Task, TaskList, TaskAssignment, Bid, RobotState, Heartbeat
+from dec_control.metrics_collector import MetricsCollector
+from dec_control.msg import Task, TaskList, TaskAssignment, Bid, RobotState, Heartbeat
 
 class TestMetrics(unittest.TestCase):
     @classmethod

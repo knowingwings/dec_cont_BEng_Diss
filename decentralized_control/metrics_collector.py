@@ -12,7 +12,7 @@ from threading import Lock
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from pathlib import Path
 
-from decentralized_control.msg import Task, TaskList, TaskAssignment, Bid, RobotState, Heartbeat, NetworkTopology
+from dec_control.msg import Task, TaskList, TaskAssignment, Bid, RobotState, Heartbeat, NetworkTopology
 from std_msgs.msg import Float64MultiArray
 
 class MetricsCollector(Node):
