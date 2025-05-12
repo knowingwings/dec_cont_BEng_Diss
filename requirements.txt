@@ -1,7 +1,7 @@
 # ROS2 Core Dependencies
 rclpy>=0.9.0
-rosidl-default-generators>=1.0.1
-rosidl-default-runtime>=1.0.1
+rosidl_default_generators>=1.0.1
+rosidl_default_runtime>=1.0.1
 
 # Scientific Computing
 numpy>=1.20.0
@@ -33,10 +33,10 @@ empy>=3.3.4
 lark>=1.1.2
 
 # ROS2 Message Generation
-ament-cmake>=1.1.0
-ament-cmake-python>=1.1.0
-ament-lint-auto>=0.11.0
-ament-lint-common>=0.11.0
+ament_cmake>=1.1.0
+ament_cmake_python>=1.1.0
+ament_lint_auto>=0.11.0
+ament_lint_common>=0.11.0
 
 # Additional Dependencies
 #pywin32>=300; platform_system=="Windows"  # Windows-specific
