@@ -7,7 +7,7 @@ import time
 from threading import Lock
 
 from dec_control.msg import Task, TaskList, TaskAssignment
-from dec_control.srv import GetAvailableTasks
+from decentralized_control.srv import GetAvailableTasks
 
 class TaskManagerNode(Node):
     """

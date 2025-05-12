@@ -8,7 +8,7 @@ import numpy as np
 import time
 from threading import Lock
 
-from decentralized_control.msg import RobotState, TaskAssignment, NetworkTopology
+from dec_control.msg import RobotState, TaskAssignment, NetworkTopology
 
 class TimeVaryingConsensusNode(Node):
     """

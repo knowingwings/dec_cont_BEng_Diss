@@ -10,7 +10,7 @@ from threading import Lock
 from geometry_msgs.msg import Wrench, PoseStamped
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64MultiArray
-from decentralized_control.msg import Task, TaskAssignment, CollaborationRequest
+from dec_control.msg import Task, TaskAssignment, CollaborationRequest
 
 class ForceControlManager(Node):
     """

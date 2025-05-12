@@ -8,9 +8,9 @@ import numpy as np
 import time
 from threading import Lock
 
-from dec_control.auction.bid_calculator import BidCalculator
+from decentralized_control.auction.bid_calculator import BidCalculator
 from dec_control.msg import Task, TaskList, Bid, TaskAssignment, RobotState, Heartbeat
-from dec_control.srv import InitAuction, SubmitBid, GetAvailableTasks
+from decentralized_control.srv import InitAuction, SubmitBid, GetAvailableTasks
 
 class AuctionNode(Node):
     """

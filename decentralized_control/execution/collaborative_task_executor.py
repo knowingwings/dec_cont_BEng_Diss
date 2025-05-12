@@ -7,7 +7,7 @@ import numpy as np
 import time
 from threading import Lock
 
-from decentralized_control.msg import Task, TaskList, TaskAssignment, CollaborationRequest, CollaborationResponse, SynchronizationSignal
+from dec_control.msg import Task, TaskList, TaskAssignment, CollaborationRequest, CollaborationResponse, SynchronizationSignal
 
 class CollaborativeTaskExecutor(Node):
     """

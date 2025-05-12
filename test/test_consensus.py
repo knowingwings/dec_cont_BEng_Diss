@@ -10,11 +10,11 @@ from threading import Thread, Event
 import os
 from pathlib import Path
 
-from dec_control.consensus.consensus_node import ConsensusNode
-from dec_control.consensus.time_varying_consensus import TimeVaryingConsensusNode
-from dec_control.communication_middleware import CommunicationMiddleware
-from dec_control.msg import RobotState, NetworkTopology
-from dec_control.metrics_collector import NetworkMetricsCollector
+from decentralized_control.consensus.consensus_node import ConsensusNode
+from decentralized_control.consensus.time_varying_consensus import TimeVaryingConsensusNode
+from decentralized_control.communication_middleware import CommunicationMiddleware
+from decentralized_control.msg import RobotState, NetworkTopology
+from decentralized_control.metrics_collector import NetworkMetricsCollector
 
 class TestConsensus(unittest.TestCase):
     @classmethod
