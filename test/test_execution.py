@@ -7,8 +7,8 @@ import time
 import numpy as np
 from threading import Thread
 
-from decentralized_control.execution.execution_controller import ExecutionController
-from decentralized_control.msg import Task, TaskList, TaskAssignment, RobotState
+from dec_control.execution.execution_controller import ExecutionController
+from dec_control.msg import Task, TaskList, TaskAssignment, RobotState
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64MultiArray
 from nav_msgs.msg import Odometry

@@ -6,8 +6,8 @@ from rclpy.node import Node
 import time
 from threading import Thread
 
-from decentralized_control.task_manager.task_manager_node import TaskManagerNode
-from decentralized_control.msg import TaskList, TaskAssignment
+from dec_control.task_manager.task_manager_node import TaskManagerNode
+from dec_control.msg import TaskList, TaskAssignment
 from dec_control.srv import GetAvailableTasks
 
 class TaskListSubscriber(Node):

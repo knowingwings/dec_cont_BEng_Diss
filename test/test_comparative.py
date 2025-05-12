@@ -8,8 +8,8 @@ import os
 import json
 from threading import Thread
 
-from decentralized_control.comparative_analysis import ComparativeAnalysis, AllocationMethod
-from decentralized_control.msg import Task, TaskList, TaskAssignment
+from dec_control.comparative_analysis import ComparativeAnalysis, AllocationMethod
+from dec_control.msg import Task, TaskList, TaskAssignment
 
 class AssignmentSubscriber(Node):
     """Test node for subscribing to comparative assignments."""
