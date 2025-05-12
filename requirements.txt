@@ -1,7 +1,7 @@
 # ROS2 Core Dependencies
 rclpy>=0.9.0
-rosidl_default_generators>=1.0.1
-rosidl_default_runtime>=1.0.1
+#rosidl_default_generators>=1.0.1
+#rosidl_default_runtime>=1.0.1
 
 # Scientific Computing
 numpy>=1.20.0
