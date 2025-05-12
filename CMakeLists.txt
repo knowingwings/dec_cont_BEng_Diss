@@ -1,18 +1,23 @@
 cmake_minimum_required(VERSION 3.8)
 project(decentralized_control)
 
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(rclpy REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(action_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 
-# Generate ROS interfaces
+# Generate ROS2 interfaces
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Bid.msg"
   "msg/CapabilityUpdate.msg"
@@ -30,17 +35,17 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/GetAvailableTasks.srv"
   "srv/InitAuction.srv"
   "srv/SubmitBid.srv"
-  DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs action_msgs
+  DEPENDENCIES 
+    std_msgs
+    geometry_msgs
+    sensor_msgs
+    nav_msgs
+    action_msgs
 )
 
-# Python
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-set(PYTHON_INSTALL_DIR lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages)
-
-# Install Python package
+# Configure Python
 ament_python_install_package(
-  decentralized_control
-  PACKAGE_DIR decentralized_control
+  ${PROJECT_NAME}
 )
 
 # Install Python executables
@@ -56,18 +61,24 @@ install(PROGRAMS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install directories
-foreach(DIR launch config models worlds)
-  install(DIRECTORY ${DIR}
-    DESTINATION share/${PROJECT_NAME}
-  )
-endforeach()
+# Install launch, config, models and worlds
+install(DIRECTORY
+  launch
+  config
+  models
+  worlds
+  DESTINATION share/${PROJECT_NAME}/
+)
 
-# Testing
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+# Export dependencies
+ament_export_dependencies(rosidl_default_runtime)
+ament_export_include_directories(include)
+ament_export_libraries(${PROJECT_NAME})
 
 ament_package()
