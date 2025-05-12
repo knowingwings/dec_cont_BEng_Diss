@@ -29,11 +29,20 @@ class TimeVaryingConsensusNode(Node):
         self.declare_parameter('max_delay', 0.5)  # Maximum acceptable delay in seconds
         self.declare_parameter('min_update_period', 0.05)  # Minimum time between updates (s)
         
+        # Add adaptive convergence parameters
+        self.declare_parameter('adapt_rate', 0.1)  # Rate of adaptation
+        self.declare_parameter('min_gamma', 0.1)   # Minimum gamma value
+        self.declare_parameter('max_gamma', 0.9)   # Maximum gamma value
+        
         # Get parameters
         self.gamma = self.get_parameter('gamma').value
         self.lambda_val = self.get_parameter('lambda').value
         self.max_delay = self.get_parameter('max_delay').value
         self.min_update_period = self.get_parameter('min_update_period').value
+        self.adapt_rate = self.get_parameter('adapt_rate').value
+        self.min_gamma = self.get_parameter('min_gamma').value
+        self.max_gamma = self.get_parameter('max_gamma').value
+        self.base_gamma = self.gamma
         
         # Initialize internal state variables
         self.state_vector = None  # Will be initialized when first data is received
@@ -42,6 +51,18 @@ class TimeVaryingConsensusNode(Node):
         self.last_state_update = 0  # Time of last state update
         self.network_topology = np.zeros((2, 2))  # Adjacency matrix for the network
         self.lock = Lock()
+        
+        # Network quality metrics
+        self.link_quality = np.ones((2, 2))      # From NetworkTopology
+        self.link_latency = np.zeros((2, 2))     # From NetworkTopology
+        self.link_reliability = np.ones((2, 2))  # From NetworkTopology
+        self.last_topology_update = 0
+        
+        # Track convergence metrics
+        self.prev_state = None
+        self.convergence_error = float('inf')
+        self.state_change_rate = 0.0
+        self.last_log_time = time.time()
         
         # Publishers
         self.state_publisher = self.create_publisher(
@@ -95,26 +116,44 @@ class TimeVaryingConsensusNode(Node):
             self.last_update_time[robot_id] = time.time()
     
     def topology_callback(self, msg):
-        """Update network topology information."""
+        """Update network topology and link quality information."""
         with self.lock:
             # Update adjacency matrix
             self.network_topology = np.array(msg.adjacency_matrix).reshape((msg.num_robots, msg.num_robots))
             
-            # Update network properties
-            # Calculate Laplacian matrix
-            self.laplacian = np.diag(np.sum(self.network_topology, axis=1)) - self.network_topology
+            # Update link metrics
+            self.link_quality = np.array(msg.link_quality).reshape((msg.num_robots, msg.num_robots))
+            self.link_latency = np.array(msg.link_latency).reshape((msg.num_robots, msg.num_robots))
+            self.link_reliability = np.array(msg.link_reliability).reshape((msg.num_robots, msg.num_robots))
             
-            # Calculate algebraic connectivity (second smallest eigenvalue of Laplacian)
+            # Update network properties
+            self.laplacian = np.diag(np.sum(self.network_topology, axis=1)) - self.network_topology
             eigenvalues = np.sort(np.linalg.eigvals(self.laplacian))
             self.algebraic_connectivity = eigenvalues[1] if len(eigenvalues) > 1 else 0
             
-            # Calculate theoretical convergence rate
+            # Update convergence parameters based on network conditions
             if self.algebraic_connectivity > 0:
+                # Calculate theoretical convergence rate
                 self.convergence_rate = -np.log(1 - self.gamma * self.algebraic_connectivity)
                 
-                self.get_logger().info(
-                    f'Network topology updated: algebraic connectivity = {self.algebraic_connectivity:.4f}, '
-                    f'convergence rate = {self.convergence_rate:.4f}')
+                # Adjust gamma based on network conditions
+                avg_quality = np.mean(self.link_quality[self.link_quality > 0])
+                avg_reliability = np.mean(self.link_reliability[self.link_reliability > 0])
+                network_health = avg_quality * avg_reliability
+                
+                # Scale gamma inversely with network health
+                self.gamma = np.clip(
+                    self.base_gamma * (1 + (1 - network_health)),
+                    self.min_gamma,
+                    self.max_gamma
+                )
+            
+            self.last_topology_update = time.time()
+            
+            self.get_logger().info(
+                f'Network metrics updated - Quality: {avg_quality:.3f}, '
+                f'Reliability: {avg_reliability:.3f}, '
+                f'Adjusted gamma: {self.gamma:.3f}')
     
     def assignment_callback(self, msg):
         """Process task assignment updates."""
@@ -138,42 +177,104 @@ class TimeVaryingConsensusNode(Node):
             self.consensus_update_callback()
     
     def consensus_update_callback(self):
-        """Perform a time-weighted consensus update with respect to current network topology."""
+        """Perform consensus update with network-aware weighting."""
         with self.lock:
             if self.state_vector is None or not self.state_vectors:
-                return  # Not enough information yet
+                return
+            
+            current_time = time.time()
+            
+            # Store previous state for convergence analysis
+            if self.prev_state is not None:
+                self.state_change_rate = np.linalg.norm(self.state_vector - self.prev_state)
+            self.prev_state = self.state_vector.copy()
             
             # Start with our current state
             x_consensus = self.state_vector.copy()
+            total_weight = 1.0
+            error_sum = 0.0
             
-            # Update state based on information from other robots with time-weighting
-            current_time = time.time()
             for robot_id, other_state in self.state_vectors.items():
-                # Skip if link is not active in current topology
-                if self.network_topology[self.robot_id-1, robot_id-1] == 0:
+                i, j = self.robot_id-1, robot_id-1
+                
+                # Skip if link is inactive
+                if self.network_topology[i,j] == 0:
                     continue
-                    
-                # Calculate time-weighted factor with exponential decay
+                
+                # Calculate time since last update
                 time_diff = current_time - self.last_update_time.get(robot_id, 0)
-                
-                # Skip if delay exceeds maximum
                 if time_diff > self.max_delay:
-                    self.get_logger().warn(
-                        f'Skipping update from Robot {robot_id}: delay {time_diff:.3f}s exceeds maximum {self.max_delay}s')
                     continue
                 
-                # Time-weighted factor with exponential decay
-                weight = self.gamma * np.exp(-self.lambda_val * time_diff)
+                # Calculate network quality factors
+                time_factor = np.exp(-self.lambda_val * time_diff)
+                quality_factor = self.link_quality[i,j]
+                reliability_factor = self.link_reliability[i,j]
+                latency_factor = 1.0 / (1.0 + self.link_latency[i,j])
                 
-                # Update state
+                # Combine factors for adaptive weight
+                network_health = quality_factor * reliability_factor * latency_factor
+                
+                # Calculate consensus weight with network awareness
+                weight = self.gamma * time_factor * network_health
+                
+                # Calculate error and update consensus state
+                error = np.linalg.norm(other_state - self.state_vector)
+                error_sum += error
+                
                 x_consensus += weight * (other_state - self.state_vector)
+                total_weight += weight
             
-            # Update our state vector
+            # Normalize by total weight
+            x_consensus /= total_weight
+            
+            # Update convergence metrics
+            self.convergence_error = error_sum / len(self.state_vectors) if self.state_vectors else float('inf')
+            
+            # Adapt gamma based on network conditions and convergence
+            self._adapt_consensus_parameter(self.convergence_error, self.state_change_rate)
+            
+            # Update state vector and tracking variables
             self.state_vector = x_consensus
             self.last_state_update = current_time
             
+            # Log metrics periodically
+            if current_time - self.last_log_time > 5.0:  # Log every 5 seconds
+                self.get_logger().info(
+                    f'Convergence metrics - Error: {self.convergence_error:.3f}, '
+                    f'Change rate: {self.state_change_rate:.3f}, '
+                    f'Gamma: {self.gamma:.3f}'
+                )
+                self.last_log_time = current_time
+            
             # Publish updated state
             self.publish_state()
+    
+    def _adapt_consensus_parameter(self, error, change_rate):
+        """Adapt consensus parameter based on network conditions and convergence."""
+        with self.lock:
+            # Calculate network health metrics
+            active_links = self.network_topology > 0
+            if not np.any(active_links):
+                return
+            
+            avg_quality = np.mean(self.link_quality[active_links])
+            avg_reliability = np.mean(self.link_reliability[active_links])
+            avg_latency = np.mean(self.link_latency[active_links])
+            
+            # Calculate desired gamma adjustment
+            network_health = avg_quality * avg_reliability / (1 + avg_latency)
+            error_factor = np.clip(error / self.convergence_error if self.convergence_error > 0 else 1.0, 0.1, 10.0)
+            
+            # More conservative when error is high, more aggressive when network conditions are good
+            target_gamma = self.base_gamma * network_health / error_factor
+            
+            # Smooth adaptation
+            self.gamma = np.clip(
+                self.gamma + self.adapt_rate * (target_gamma - self.gamma),
+                self.min_gamma,
+                self.max_gamma
+            )
     
     def publish_state(self):
         """Publish current state information."""

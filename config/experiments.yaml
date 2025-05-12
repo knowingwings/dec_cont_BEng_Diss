@@ -1,0 +1,249 @@
+consensus_experiments:
+  # Base parameters for all experiments
+  default_params:
+    run_duration: 300.0  # 5 minutes per experiment
+    num_runs: 5
+    num_robots: 2
+    min_update_period: 0.1
+    max_delay: 1.0
+    output_dir: "results/consensus"
+
+  # Different network conditions to test
+  network_scenarios:
+    - name: "ideal"
+      delay_mean_ms: 10
+      delay_stddev_ms: 2
+      packet_loss_prob: 0.0
+      delay_pattern: constant
+      description: "Ideal network conditions"
+
+    - name: "moderate_delay"
+      delay_mean_ms: 100
+      delay_stddev_ms: 20
+      packet_loss_prob: 0.05
+      delay_pattern: constant
+      description: "Moderate network delay"
+
+    - name: "high_delay_loss"
+      delay_mean_ms: 250
+      delay_stddev_ms: 50
+      packet_loss_prob: 0.15
+      delay_pattern: constant
+      description: "High delay with packet loss"
+
+    - name: "severe"
+      delay_mean_ms: 500
+      delay_stddev_ms: 100
+      packet_loss_prob: 0.25
+      delay_pattern: constant
+      description: "Severe network conditions"
+
+    - name: "time_varying_sinusoidal"
+      delay_pattern: sinusoidal
+      base_delay_ms: 100
+      amplitude_ms: 75
+      period_s: 30.0
+      packet_loss_prob: 0.1
+      description: "Time-varying sinusoidal network conditions"
+
+    - name: "time_varying_square"
+      delay_pattern: square_wave
+      base_delay_ms: 100
+      amplitude_ms: 75
+      period_s: 30.0
+      packet_loss_prob: 0.1
+      description: "Time-varying square wave network conditions"
+
+    - name: "time_varying_sawtooth"
+      delay_pattern: sawtooth
+      base_delay_ms: 100
+      amplitude_ms: 75
+      period_s: 30.0
+      packet_loss_prob: 0.1
+      description: "Time-varying sawtooth network conditions"
+
+    - name: "increasing_load"
+      delay_mean_ms: 50
+      delay_stddev_ms: 10
+      packet_loss_prob: 0.05
+      delay_pattern: linear_increase
+      increase_rate_ms: 1.0  # ms/s increase
+      description: "Increasing network load"
+
+    - name: "burst_traffic"
+      delay_mean_ms: 50
+      delay_stddev_ms: 10
+      packet_loss_prob: 0.05
+      delay_pattern: burst
+      burst_interval_s: 60.0
+      burst_duration_s: 10.0
+      burst_multiplier: 5.0
+      description: "Burst traffic network conditions"
+
+  # Different consensus algorithm configurations
+  algorithm_variants:
+    - name: "baseline"
+      gamma: 0.5
+      lambda: 0.1
+      adapt_rate: 0.0
+      use_network_metrics: false
+      description: "Baseline consensus without adaptation"
+
+    - name: "network_aware"
+      gamma: 0.5
+      lambda: 0.1
+      adapt_rate: 0.1
+      min_gamma: 0.1
+      max_gamma: 0.9
+      use_network_metrics: true
+      description: "Network-aware adaptive consensus"
+
+  # Initial state configurations
+  initial_states:
+    - name: "divergent_position"
+      robot1:
+        position: [0.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0]
+        capabilities: [1.0, 1.0, 1.0, 1.0, 1.0]
+        workload: 0.0
+      robot2:
+        position: [5.0, 5.0, 0.0]
+        orientation: [0.0, 0.0, 0.0]
+        capabilities: [1.0, 1.0, 1.0, 1.0, 1.0]
+        workload: 0.0
+
+    - name: "divergent_orientation"
+      robot1:
+        position: [0.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0]
+        capabilities: [1.0, 1.0, 1.0, 1.0, 1.0]
+        workload: 0.0
+      robot2:
+        position: [0.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 3.14]
+        capabilities: [1.0, 1.0, 1.0, 1.0, 1.0]
+        workload: 0.0
+
+    - name: "random_workload"
+      robot1:
+        position: [0.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0]
+        capabilities: [1.0, 1.0, 1.0, 1.0, 1.0]
+        workload: 0.3
+      robot2:
+        position: [0.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0]
+        capabilities: [1.0, 1.0, 1.0, 1.0, 1.0]
+        workload: 0.7
+
+  # Experiment combinations to run
+  experiment_sets:
+    baseline_comparison:
+      description: "Compare baseline vs adaptive approaches"
+      network_scenarios: ["ideal", "moderate_delay", "high_delay_loss"]
+      algorithm_variants: ["baseline", "adaptive_local", "network_aware"]
+      initial_states: ["divergent_position"]
+      runs_per_combination: 5
+
+    network_robustness:
+      description: "Tests robustness to different network conditions"
+      runs_per_combination: 5
+      network_scenarios:
+        - ideal
+        - moderate_delay
+        - high_delay_loss
+        - severe
+      algorithm_variants:
+        - baseline
+        - network_aware
+      initial_states:
+        - divergent_position
+        - divergent_orientation
+        - random_workload
+
+    adaptation_dynamics:
+      description: "Tests adaptation to time-varying network conditions"
+      runs_per_combination: 3
+      network_scenarios:
+        - time_varying_sinusoidal
+        - time_varying_square
+        - time_varying_sawtooth
+      algorithm_variants:
+        - baseline
+        - network_aware
+      initial_states:
+        - divergent_position
+
+    scalability:
+      description: "Tests scalability with increasing network load"
+      runs_per_combination: 3
+      network_scenarios:
+        - increasing_load
+        - burst_traffic
+      algorithm_variants:
+        - baseline
+        - network_aware
+      initial_states:
+        - divergent_position
+
+metrics:
+  # Metrics to collect during experiments
+  convergence:
+    - name: "position_error"
+      type: "l2_norm"
+      fields: ["position"]
+      threshold: 0.1
+
+    - name: "orientation_error"
+      type: "l2_norm"
+      fields: ["orientation"]
+      threshold: 0.1
+
+    - name: "capability_error"
+      type: "l2_norm"
+      fields: ["capabilities"]
+      threshold: 0.05
+
+    - name: "workload_error"
+      type: "absolute"
+      fields: ["workload"]
+      threshold: 0.5
+
+  communication:
+    - name: "message_count"
+      type: "counter"
+      message_types: ["RobotState", "NetworkTopology"]
+
+    - name: "bandwidth_usage"
+      type: "data_rate"
+      window_size: 1.0  # seconds
+
+  timing:
+    - name: "convergence_time"
+      type: "time_to_threshold"
+      metric: "position_error"
+      threshold: 0.1
+
+    - name: "update_interval"
+      type: "time_between_updates"
+      window_size: 10  # samples
+
+visualization:
+  plots:
+    - name: "convergence_comparison"
+      type: "bar"
+      x: "network_scenario"
+      y: "convergence_time"
+      hue: "algorithm_variant"
+
+    - name: "message_efficiency"
+      type: "scatter"
+      x: "message_count"
+      y: "convergence_time"
+      hue: "network_scenario"
+
+    - name: "error_evolution"
+      type: "line"
+      x: "time"
+      y: ["position_error", "orientation_error", "capability_error"]
+      facet: "algorithm_variant"

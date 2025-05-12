@@ -181,59 +181,60 @@ class PartialFailureRecoveryNode(Node):
         Evaluate if tasks assigned to a robot are still feasible
         with degraded capabilities.
         """
-        # Find tasks assigned to the robot
-        assigned_tasks = []
-        for task_id, assigned_robot in self.task_assignments.items():
-            if assigned_robot == robot_id and task_id in self.tasks:
-                assigned_tasks.append(task_id)
-        
-        if not assigned_tasks:
-            self.get_logger().info(f'No tasks assigned to Robot {robot_id}')
-            return
-        
-        # Get robot capabilities
-        if robot_id not in self.robot_capabilities:
-            self.get_logger().warn(f'No capability data for Robot {robot_id}')
-            return
+        with self.lock:
+            # Find tasks assigned to the robot
+            assigned_tasks = []
+            for task_id, assigned_robot in self.task_assignments.items():
+                if assigned_robot == robot_id and task_id in self.tasks:
+                    assigned_tasks.append(task_id)
             
-        capabilities = self.robot_capabilities[robot_id]
-        
-        # Evaluate feasibility for each task
-        infeasible_tasks = []
-        
-        for task_id in assigned_tasks:
-            task = self.tasks[task_id]
+            if not assigned_tasks:
+                self.get_logger().info(f'No tasks assigned to Robot {robot_id}')
+                return
             
-            # Check if task is still feasible with current capabilities
-            required_capabilities = np.array(task.capabilities_required)
+            # Get robot capabilities
+            if robot_id not in self.robot_capabilities:
+                self.get_logger().warn(f'No capability data for Robot {robot_id}')
+                return
             
-            # Calculate capability match score
-            if len(capabilities) > 0 and len(required_capabilities) > 0:
-                # Normalize vectors
-                capabilities_norm = capabilities / np.linalg.norm(capabilities)
-                required_norm = required_capabilities / np.linalg.norm(required_capabilities)
+            capabilities = self.robot_capabilities[robot_id]
+            
+            # Evaluate feasibility for each task
+            infeasible_tasks = []
+            
+            for task_id in assigned_tasks:
+                task = self.tasks[task_id]
                 
-                # Compute match score (cosine similarity)
-                match_score = np.dot(capabilities_norm, required_norm)
+                # Check if task is still feasible with current capabilities
+                required_capabilities = np.array(task.capabilities_required)
                 
-                if match_score < self.capability_threshold:
+                # Calculate capability match score
+                if len(capabilities) > 0 and len(required_capabilities) > 0:
+                    # Normalize vectors
+                    capabilities_norm = capabilities / np.linalg.norm(capabilities)
+                    required_norm = required_capabilities / np.linalg.norm(required_capabilities)
+                    
+                    # Compute match score (cosine similarity)
+                    match_score = np.dot(capabilities_norm, required_norm)
+                    
+                    if match_score < self.capability_threshold:
+                        infeasible_tasks.append(task_id)
+                else:
+                    # If capability vectors are empty, assume infeasible
                     infeasible_tasks.append(task_id)
-            else:
-                # If capability vectors are empty, assume infeasible
-                infeasible_tasks.append(task_id)
-        
-        if infeasible_tasks:
-            self.get_logger().info(
-                f'Found {len(infeasible_tasks)} infeasible tasks for Robot {robot_id}: {infeasible_tasks}')
             
-            # Publish recovery status with infeasible tasks
-            msg = RecoveryStatus()
-            msg.robot_id = robot_id
-            msg.recovery_type = "TASK_INFEASIBLE"
-            msg.infeasible_tasks = infeasible_tasks
-            msg.timestamp = int(time.time() * 1000)
-            
-            self.recovery_status_pub.publish(msg)
+            if infeasible_tasks:
+                self.get_logger().info(
+                    f'Found {len(infeasible_tasks)} infeasible tasks for Robot {robot_id}: {infeasible_tasks}')
+                
+                # Publish recovery status with infeasible tasks
+                msg = RecoveryStatus()
+                msg.robot_id = robot_id
+                msg.recovery_type = "TASK_INFEASIBLE"
+                msg.infeasible_tasks = infeasible_tasks
+                msg.timestamp = int(time.time() * 1000)
+                
+                self.recovery_status_pub.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)

@@ -309,17 +309,18 @@ class CollaborativeTaskExecutor(Node):
     
     def complete_collaborative_task(self, task_id):
         """Mark collaborative task as complete."""
-        self.get_logger().info(f'Completed collaborative task {task_id}')
-        
-        # Remove task from active list
-        if self.current_collab_task and self.current_collab_task.id == task_id:
-            self.current_collab_task = None
-            self.is_leader = False
-            self.current_sync_point = 0
-        
-        # Clean up task data
-        if task_id in self.sync_states:
-            del self.sync_states[task_id]
-        
-        if task_id in self.sync_points:
-            del self.sync_points[task_id]
+        with self.lock:
+            self.get_logger().info(f'Completed collaborative task {task_id}')
+            
+            # Remove task from active list
+            if self.current_collab_task and self.current_collab_task.id == task_id:
+                self.current_collab_task = None
+                self.is_leader = False
+                self.current_sync_point = 0
+            
+            # Clean up task data
+            if task_id in self.sync_states:
+                del self.sync_states[task_id]
+            
+            if task_id in self.sync_points:
+                del self.sync_points[task_id]

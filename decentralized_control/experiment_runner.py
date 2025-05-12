@@ -53,7 +53,7 @@ class ExperimentRunner:
         
         # Prepare launch command
         cmd = [
-            'ros2', 'launch', 'decentralized_control', 'decentralised_controller.launch.py',
+            'ros2', 'launch', 'decentralized_control', 'decentralized_controller.launch.py',
             f'num_tasks:={tasks}',
             f'delay_ms:={delay}',
             f'packet_loss:={packet_loss}',

@@ -1,0 +1,44 @@
+# ROS2 Core Dependencies
+rclpy>=0.9.0
+rosidl-default-generators>=1.0.1
+rosidl-default-runtime>=1.0.1
+
+# Scientific Computing
+numpy>=1.20.0
+scipy>=1.7.0
+pandas>=1.3.0
+
+# Data Serialization
+PyYAML>=6.0.0
+
+# Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Testing
+pytest>=6.0.0
+pytest-cov>=2.0.0
+pytest-repeat>=0.9.0
+pytest-rerunfailures>=10.0
+
+# Documentation and Output
+coloredlogs>=15.0.0
+humanfriendly>=10.0.0
+docutils>=0.17.0
+
+# Development Tools
+colcon-common-extensions>=0.3.0
+setuptools>=65.5.0
+empy>=3.3.4
+lark>=1.1.2
+
+# ROS2 Message Generation
+ament-cmake>=1.1.0
+ament-cmake-python>=1.1.0
+ament-lint-auto>=0.11.0
+ament-lint-common>=0.11.0
+
+# Additional Dependencies
+#pywin32>=300; platform_system=="Windows"  # Windows-specific
+xacro>=2.0.0  # For robot model generation
+gazebo_msgs>=2.9.0  # For Gazebo simulation integration

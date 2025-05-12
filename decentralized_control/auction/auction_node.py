@@ -6,6 +6,7 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 import numpy as np
 import time
+from threading import Lock
 
 from decentralized_control.auction.bid_calculator import BidCalculator
 from decentralized_control.msg import Task, TaskList, Bid, TaskAssignment, RobotState, Heartbeat
@@ -19,6 +20,9 @@ class AuctionNode(Node):
     
     def __init__(self):
         super().__init__('auction_node')
+        
+        # Add lock for thread safety
+        self.lock = Lock()
         
         # Get robot ID from parameter
         self.declare_parameter('robot_id', 1)
@@ -139,21 +143,22 @@ class AuctionNode(Node):
     
     def task_callback(self, msg):
         """Process incoming tasks"""
-        for task in msg.tasks:
-            self.tasks[task.id] = task
-            
-            # Initialize task state if new
-            if task.id not in self.prices:
-                self.prices[task.id] = 0.0
-                self.assignments[task.id] = 0  # Unassigned
-                self.initial_assignments[task.id] = 0
-                self.completion_status[task.id] = 0  # Not completed
-                self.task_oscillation_count[task.id] = 0
-                self.task_last_robot[task.id] = 0
-                self.unassigned_iterations[task.id] = 0
-            
-            # Update available tasks
-            self.update_available_tasks()
+        with self.lock:
+            for task in msg.tasks:
+                self.tasks[task.id] = task
+                
+                # Initialize task state if new
+                if task.id not in self.prices:
+                    self.prices[task.id] = 0.0
+                    self.assignments[task.id] = 0  # Unassigned
+                    self.initial_assignments[task.id] = 0
+                    self.completion_status[task.id] = 0  # Not completed
+                    self.task_oscillation_count[task.id] = 0
+                    self.task_last_robot[task.id] = 0
+                    self.unassigned_iterations[task.id] = 0
+                
+                # Update available tasks
+                self.update_available_tasks()
     
     def bid_callback(self, msg):
         """Process incoming bids from other robots"""
@@ -177,25 +182,26 @@ class AuctionNode(Node):
         """Process task assignment updates"""
         if self.failed:
             return
-        
-        # Update assignments from consensus
-        for i in range(len(msg.task_ids)):
-            task_id = msg.task_ids[i]
-            robot_id = msg.robot_ids[i]
-            price = msg.prices[i]
             
-            # Track oscillations
-            if task_id in self.assignments and self.assignments[task_id] != robot_id and self.assignments[task_id] > 0:
-                self.task_oscillation_count[task_id] += 1
-                self.task_last_robot[task_id] = robot_id
-            
-            # Update local state
-            self.assignments[task_id] = robot_id
-            self.prices[task_id] = price
-            
-            # If this is the first assignment, record for recovery analysis
-            if self.initial_assignments[task_id] == 0 and robot_id > 0:
-                self.initial_assignments[task_id] = robot_id
+        with self.lock:
+            # Update assignments from consensus
+            for i in range(len(msg.task_ids)):
+                task_id = msg.task_ids[i]
+                robot_id = msg.robot_ids[i]
+                price = msg.prices[i]
+                
+                # Track oscillations
+                if task_id in self.assignments and self.assignments[task_id] != robot_id and self.assignments[task_id] > 0:
+                    self.task_oscillation_count[task_id] += 1
+                    self.task_last_robot[task_id] = robot_id
+                
+                # Update local state
+                self.assignments[task_id] = robot_id
+                self.prices[task_id] = price
+                
+                # If this is the first assignment, record for recovery analysis
+                if self.initial_assignments[task_id] == 0 and robot_id > 0:
+                    self.initial_assignments[task_id] = robot_id
     
     def robot_state_callback(self, msg):
         """Process state information from other robots"""
@@ -269,205 +275,206 @@ class AuctionNode(Node):
         if self.failed or not self.tasks:
             return
         
-        # Update available tasks
-        self.update_available_tasks()
-        
-        # Skip if no available tasks
-        if not self.available_tasks:
-            return
-        
-        # Update unassigned iterations counter
-        for task_id in self.tasks:
-            if self.assignments[task_id] == 0:
-                self.unassigned_iterations[task_id] += 1
+        with self.lock:
+            # Update available tasks
+            self.update_available_tasks()
+            
+            # Skip if no available tasks
+            if not self.available_tasks:
+                return
+            
+            # Update unassigned iterations counter
+            for task_id in self.tasks:
+                if self.assignments[task_id] == 0:
+                    self.unassigned_iterations[task_id] += 1
+                else:
+                    self.unassigned_iterations[task_id] = 0
+            
+            # Mark "in recovery" tasks as unassigned before bidding
+            recovery_tasks = [task_id for task_id, robot_id in self.assignments.items() if robot_id == -1]
+            for task_id in recovery_tasks:
+                self.assignments[task_id] = 0
+                if task_id not in self.available_tasks:
+                    self.available_tasks.append(task_id)
+            
+            # Calculate robot workloads
+            robot_workloads = self.calculate_robot_workloads()
+            
+            # Adaptive epsilon based on iteration
+            if self.utility_iter < 10:
+                base_epsilon = self.epsilon * 1.5  # Higher initial epsilon to prevent oscillations
             else:
-                self.unassigned_iterations[task_id] = 0
-        
-        # Mark "in recovery" tasks as unassigned before bidding
-        recovery_tasks = [task_id for task_id, robot_id in self.assignments.items() if robot_id == -1]
-        for task_id in recovery_tasks:
-            self.assignments[task_id] = 0
-            if task_id not in self.available_tasks:
-                self.available_tasks.append(task_id)
-        
-        # Calculate robot workloads
-        robot_workloads = self.calculate_robot_workloads()
-        
-        # Adaptive epsilon based on iteration
-        if self.utility_iter < 10:
-            base_epsilon = self.epsilon * 1.5  # Higher initial epsilon to prevent oscillations
-        else:
-            base_epsilon = self.epsilon
-        
-        # Calculate workload ratio and imbalance
-        workload_ratio = 1.0
-        workload_imbalance = 0.0
-        max_workload = max(robot_workloads.values()) if robot_workloads else 0
-        
-        if max_workload > 0:
-            workload_ratio = robot_workloads.get(self.robot_id, 0) / max_workload
-            min_workload = min(robot_workloads.values()) if robot_workloads else 0
-            workload_diff = max_workload - min_workload
-            workload_imbalance = workload_diff / max_workload if max_workload > 0 else 0
-        
-        # Adaptive batch sizing
-        if self.utility_iter < 10:
-            base_batch_size = np.ceil(len(self.available_tasks)/3)  # More aggressive initially
-        else:
-            base_batch_size = np.ceil(len(self.available_tasks)/5)  # Base batch size
-        
-        # Adjust batch size based on workload imbalance
-        if workload_imbalance > 0.3:
-            imbalance_factor = 1.5  # Larger batches when imbalance is high
-        elif workload_imbalance > 0.15:
-            imbalance_factor = 1.25
-        else:
-            imbalance_factor = 1.0
-        
-        # Adjust batch size based on unassigned tasks
-        unassigned_count = sum(1 for r in self.assignments.values() if r == 0)
-        if unassigned_count > 0:
-            unassigned_factor = 1 + (unassigned_count / len(self.tasks)) * 0.5
-        else:
-            unassigned_factor = 1.0
-        
-        # Calculate final batch size
-        max_bids_per_iteration = max(2, int(np.ceil(base_batch_size * imbalance_factor * unassigned_factor)))
-        max_bids_per_iteration = min(max_bids_per_iteration, len(self.available_tasks))
-        
-        # Calculate bids for available tasks
-        task_utilities = {}
-        for task_id in self.available_tasks:
-            # Skip if already assigned to this robot
-            if self.assignments[task_id] == self.robot_id:
-                continue
-                
-            # Calculate bid with enhanced global objective consideration
-            bid_value = self.calculate_bid(
-                task_id, robot_workloads.get(self.robot_id, 0), 
-                workload_ratio, workload_imbalance)
-                
-            self.bids[(self.robot_id, task_id)] = bid_value
-            utility = bid_value - self.prices[task_id]
+                base_epsilon = self.epsilon
             
-            # Apply penalty if this task has recently oscillated between robots
-            if self.task_oscillation_count.get(task_id, 0) > 3 and self.task_last_robot.get(task_id, 0) != self.robot_id:
-                utility *= 0.9
-                
-            # Special handling for long-unassigned tasks with escalating incentives
-            if self.assignments[task_id] == 0:
-                unassigned_iter = self.unassigned_iterations.get(task_id, 0)
-                if unassigned_iter > 20:
-                    bonus_factor = min(3.0, 1.0 + (unassigned_iter - 20) * 0.1)
-                    utility *= bonus_factor
+            # Calculate workload ratio and imbalance
+            workload_ratio = 1.0
+            workload_imbalance = 0.0
+            max_workload = max(robot_workloads.values()) if robot_workloads else 0
+            
+            if max_workload > 0:
+                workload_ratio = robot_workloads.get(self.robot_id, 0) / max_workload
+                min_workload = min(robot_workloads.values()) if robot_workloads else 0
+                workload_diff = max_workload - min_workload
+                workload_imbalance = workload_diff / max_workload if max_workload > 0 else 0
+            
+            # Adaptive batch sizing
+            if self.utility_iter < 10:
+                base_batch_size = np.ceil(len(self.available_tasks)/3)  # More aggressive initially
+            else:
+                base_batch_size = np.ceil(len(self.available_tasks)/5)  # Base batch size
+            
+            # Adjust batch size based on workload imbalance
+            if workload_imbalance > 0.3:
+                imbalance_factor = 1.5  # Larger batches when imbalance is high
+            elif workload_imbalance > 0.15:
+                imbalance_factor = 1.25
+            else:
+                imbalance_factor = 1.0
+            
+            # Adjust batch size based on unassigned tasks
+            unassigned_count = sum(1 for r in self.assignments.values() if r == 0)
+            if unassigned_count > 0:
+                unassigned_factor = 1 + (unassigned_count / len(self.tasks)) * 0.5
+            else:
+                unassigned_factor = 1.0
+            
+            # Calculate final batch size
+            max_bids_per_iteration = max(2, int(np.ceil(base_batch_size * imbalance_factor * unassigned_factor)))
+            max_bids_per_iteration = min(max_bids_per_iteration, len(self.available_tasks))
+            
+            # Calculate bids for available tasks
+            task_utilities = {}
+            for task_id in self.available_tasks:
+                # Skip if already assigned to this robot
+                if self.assignments[task_id] == self.robot_id:
+                    continue
                     
-            self.utilities[(self.robot_id, task_id)] = utility
-            task_utilities[task_id] = utility
-        
-        # Sort tasks by utility
-        sorted_tasks = sorted(
-            task_utilities.items(), key=lambda x: x[1], reverse=True)
-        
-        # Select best tasks with positive utility - limited by batch size
-        bid_count = 0
-        for task_id, utility in sorted_tasks:
-            if utility > 0 and bid_count < max_bids_per_iteration:
-                # Create and publish bid
-                bid_msg = Bid()
-                bid_msg.robot_id = self.robot_id
-                bid_msg.task_id = task_id
-                bid_msg.bid_value = self.bids[(self.robot_id, task_id)]
-                bid_msg.utility = utility
+                # Calculate bid with enhanced global objective consideration
+                bid_value = self.calculate_bid(
+                    task_id, robot_workloads.get(self.robot_id, 0), 
+                    workload_ratio, workload_imbalance)
+                    
+                self.bids[(self.robot_id, task_id)] = bid_value
+                utility = bid_value - self.prices[task_id]
                 
-                self.bid_publisher.publish(bid_msg)
-                
-                # Process bid locally as well
-                old_assignment = self.assignments[task_id]
-                
-                # Track oscillation (robot changes) for this task
-                if old_assignment > 0 and old_assignment != self.robot_id:
-                    self.task_oscillation_count[task_id] = self.task_oscillation_count.get(task_id, 0) + 1
-                self.task_last_robot[task_id] = self.robot_id
-                
-                # Update assignment and price
-                self.assignments[task_id] = self.robot_id
-                
-                # Dynamic price increment with multiple factors
-                effective_epsilon = base_epsilon
-                
-                # Factor 1: Task oscillation history
-                oscillation_count = self.task_oscillation_count.get(task_id, 0)
-                if oscillation_count > 2:
-                    effective_epsilon *= (1 + 0.15 * oscillation_count)
-                
-                # Factor 2: Workload balancing
-                if workload_ratio > 1.2:  # Robot has >20% more workload than minimum
-                    effective_epsilon *= 1.5  # Increase price faster
-                elif workload_ratio < 0.8:  # Robot has <80% of maximum workload
-                    effective_epsilon *= 0.7  # Increase price slower
-                
-                # Cap prices to prevent them from getting too high
-                max_price = 3.0 * max(self.alpha)  # Maximum reasonable price
-                if self.prices[task_id] + effective_epsilon > max_price:
-                    effective_epsilon = max(0, max_price - self.prices[task_id])
-                
-                # Update price
-                self.prices[task_id] += effective_epsilon
-                
-                # If this is the first assignment, record it for recovery analysis
-                if self.initial_assignments[task_id] == 0:
-                    self.initial_assignments[task_id] = self.robot_id
-                
-                # Update workload in our records
-                if old_assignment > 0:
-                    # Reduce workload for previous robot (handled in other robot's node)
-                    pass
-                
-                # Update our workload
-                if hasattr(self.tasks[task_id], 'execution_time'):
-                    self.workload += self.tasks[task_id].execution_time
-                else:
-                    self.workload += 1.0
-                
-                # Publish updated assignments
-                self.publish_assignments()
-                
-                bid_count += 1
-        
-        # Progressive price reduction for unassigned tasks
-        if self.utility_iter > 10:
-            unassigned_tasks = [task_id for task_id, robot_id in self.assignments.items() if robot_id == 0]
+                # Apply penalty if this task has recently oscillated between robots
+                if self.task_oscillation_count.get(task_id, 0) > 3 and self.task_last_robot.get(task_id, 0) != self.robot_id:
+                    utility *= 0.9
+                    
+                # Special handling for long-unassigned tasks with escalating incentives
+                if self.assignments[task_id] == 0:
+                    unassigned_iter = self.unassigned_iterations.get(task_id, 0)
+                    if unassigned_iter > 20:
+                        bonus_factor = min(3.0, 1.0 + (unassigned_iter - 20) * 0.1)
+                        utility *= bonus_factor
+                        
+                self.utilities[(self.robot_id, task_id)] = utility
+                task_utilities[task_id] = utility
             
-            for task_id in unassigned_tasks:
-                unassigned_iter = self.unassigned_iterations.get(task_id, 0)
+            # Sort tasks by utility
+            sorted_tasks = sorted(
+                task_utilities.items(), key=lambda x: x[1], reverse=True)
+            
+            # Select best tasks with positive utility - limited by batch size
+            bid_count = 0
+            for task_id, utility in sorted_tasks:
+                if utility > 0 and bid_count < max_bids_per_iteration:
+                    # Create and publish bid
+                    bid_msg = Bid()
+                    bid_msg.robot_id = self.robot_id
+                    bid_msg.task_id = task_id
+                    bid_msg.bid_value = self.bids[(self.robot_id, task_id)]
+                    bid_msg.utility = utility
+                    
+                    self.bid_publisher.publish(bid_msg)
+                    
+                    # Process bid locally as well
+                    old_assignment = self.assignments[task_id]
+                    
+                    # Track oscillation (robot changes) for this task
+                    if old_assignment > 0 and old_assignment != self.robot_id:
+                        self.task_oscillation_count[task_id] = self.task_oscillation_count.get(task_id, 0) + 1
+                    self.task_last_robot[task_id] = self.robot_id
+                    
+                    # Update assignment and price
+                    self.assignments[task_id] = self.robot_id
+                    
+                    # Dynamic price increment with multiple factors
+                    effective_epsilon = base_epsilon
+                    
+                    # Factor 1: Task oscillation history
+                    oscillation_count = self.task_oscillation_count.get(task_id, 0)
+                    if oscillation_count > 2:
+                        effective_epsilon *= (1 + 0.15 * oscillation_count)
+                    
+                    # Factor 2: Workload balancing
+                    if workload_ratio > 1.2:  # Robot has >20% more workload than minimum
+                        effective_epsilon *= 1.5  # Increase price faster
+                    elif workload_ratio < 0.8:  # Robot has <80% of maximum workload
+                        effective_epsilon *= 0.7  # Increase price slower
+                    
+                    # Cap prices to prevent them from getting too high
+                    max_price = 3.0 * max(self.alpha)  # Maximum reasonable price
+                    if self.prices[task_id] + effective_epsilon > max_price:
+                        effective_epsilon = max(0, max_price - self.prices[task_id])
+                    
+                    # Update price
+                    self.prices[task_id] += effective_epsilon
+                    
+                    # If this is the first assignment, record it for recovery analysis
+                    if self.initial_assignments[task_id] == 0:
+                        self.initial_assignments[task_id] = self.robot_id
+                    
+                    # Update workload in our records
+                    if old_assignment > 0:
+                        # Reduce workload for previous robot (handled in other robot's node)
+                        pass
+                    
+                    # Update our workload
+                    if hasattr(self.tasks[task_id], 'execution_time'):
+                        self.workload += self.tasks[task_id].execution_time
+                    else:
+                        self.workload += 1.0
+                    
+                    # Publish updated assignments
+                    self.publish_assignments()
+                    
+                    bid_count += 1
+            
+            # Progressive price reduction for unassigned tasks
+            if self.utility_iter > 10:
+                unassigned_tasks = [task_id for task_id, robot_id in self.assignments.items() if robot_id == 0]
                 
-                # Progressive price reduction - more aggressive for longer unassigned tasks
-                if unassigned_iter > 30:
-                    reduction_factor = 0.3  # Very aggressive reduction
-                elif unassigned_iter > 20:
-                    reduction_factor = 0.5  # Strong reduction
-                elif unassigned_iter > 10:
-                    reduction_factor = 0.7  # Moderate reduction
-                else:
-                    reduction_factor = 0.9  # Mild reduction
-                
-                self.prices[task_id] *= reduction_factor
-                
-                # Ensure price doesn't go below zero
-                self.prices[task_id] = max(0, self.prices[task_id])
-                
-                # Clear oscillation history to allow fresh bidding
-                if unassigned_iter > 15:
-                    self.task_oscillation_count[task_id] = 0
-                
-                # Log status updates for difficult tasks
-                if unassigned_iter > 25 and self.utility_iter % 5 == 0:
-                    self.get_logger().info(
-                        f'Task {task_id} remains unassigned for {unassigned_iter} iterations - '
-                        f'price reduced to {self.prices[task_id]:.2f}')
-        
-        # Update utility iteration counter
-        self.utility_iter += 1
+                for task_id in unassigned_tasks:
+                    unassigned_iter = self.unassigned_iterations.get(task_id, 0)
+                    
+                    # Progressive price reduction - more aggressive for longer unassigned tasks
+                    if unassigned_iter > 30:
+                        reduction_factor = 0.3  # Very aggressive reduction
+                    elif unassigned_iter > 20:
+                        reduction_factor = 0.5  # Strong reduction
+                    elif unassigned_iter > 10:
+                        reduction_factor = 0.7  # Moderate reduction
+                    else:
+                        reduction_factor = 0.9  # Mild reduction
+                    
+                    self.prices[task_id] *= reduction_factor
+                    
+                    # Ensure price doesn't go below zero
+                    self.prices[task_id] = max(0, self.prices[task_id])
+                    
+                    # Clear oscillation history to allow fresh bidding
+                    if unassigned_iter > 15:
+                        self.task_oscillation_count[task_id] = 0
+                    
+                    # Log status updates for difficult tasks
+                    if unassigned_iter > 25 and self.utility_iter % 5 == 0:
+                        self.get_logger().info(
+                            f'Task {task_id} remains unassigned for {unassigned_iter} iterations - '
+                            f'price reduced to {self.prices[task_id]:.2f}')
+            
+            # Update utility iteration counter
+            self.utility_iter += 1
     
     def calculate_bid(self, task_id, robot_workload, workload_ratio, workload_imbalance):
         """Calculate bid for a given task"""

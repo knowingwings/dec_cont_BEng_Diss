@@ -4,6 +4,7 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 import time
+from threading import Lock
 
 from decentralized_control.msg import Task, TaskList, TaskAssignment
 from decentralized_control.srv import GetAvailableTasks
@@ -15,6 +16,9 @@ class TaskManagerNode(Node):
     
     def __init__(self):
         super().__init__('task_manager_node')
+        
+        # Add lock for thread safety
+        self.lock = Lock()
         
         # Initialize parameters
         self.declare_parameter('num_tasks', 10)
@@ -180,21 +184,22 @@ class TaskManagerNode(Node):
     
     def update_available_tasks(self):
         """Update the list of available tasks based on prerequisites"""
-        completed_tasks = [task_id for task_id, status in self.completion_status.items() if status == 1]
-        
-        # Find tasks with all prerequisites completed
-        self.available_tasks = []
-        for task_id, task in self.tasks.items():
-            if self.completion_status[task_id] == 1:
-                continue  # Skip completed tasks
+        with self.lock:
+            completed_tasks = [task_id for task_id, status in self.completion_status.items() if status == 1]
             
-            # Check prerequisites
-            if not task.prerequisites:
-                self.available_tasks.append(task_id)
-            else:
-                # Check if all prerequisites are completed
-                if all(prereq in completed_tasks for prereq in task.prerequisites):
+            # Find tasks with all prerequisites completed
+            self.available_tasks = []
+            for task_id, task in self.tasks.items():
+                if self.completion_status[task_id] == 1:
+                    continue  # Skip completed tasks
+                
+                # Check prerequisites
+                if not task.prerequisites:
                     self.available_tasks.append(task_id)
+                else:
+                    # Check if all prerequisites are completed
+                    if all(prereq in completed_tasks for prereq in task.prerequisites):
+                        self.available_tasks.append(task_id)
     
     def publish_tasks(self):
         """Publish current task information"""
@@ -205,13 +210,22 @@ class TaskManagerNode(Node):
     
     def assignment_callback(self, msg):
         """Process task assignment updates"""
-        # For now, we're just tracking completion status
-        # In a real implementation, this would monitor execution progress
-        pass
+        with self.lock:
+            # Update completion status based on assignments
+            for i in range(len(msg.task_ids)):
+                task_id = msg.task_ids[i]
+                robot_id = msg.robot_ids[i]
+                
+                if task_id in self.completion_status and robot_id > 0:
+                    self.completion_status[task_id] = 1  # Completed
+            
+            # Update available tasks after status changes
+            self.update_available_tasks()
     
     def get_available_tasks_callback(self, request, response):
         """Service to get currently available tasks"""
-        response.task_ids = self.available_tasks
+        with self.lock:
+            response.task_ids = self.available_tasks.copy()
         return response
     
     def task_update_callback(self):
