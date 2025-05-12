@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.8)
 project(decentralized_control)
 
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
 # Find required packages
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
@@ -33,12 +41,15 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs action_msgs
 )
 
-# Install Python modules
+# Python installation
+set(PYTHON_INSTALL_DIR lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+
+# Install Python package
 ament_python_install_package(${PROJECT_NAME}
   PACKAGE_DIR ${PROJECT_NAME}
 )
 
-# Install Python scripts
+# Install Python executables
 install(PROGRAMS
   scripts/analyze_adaptation.py
   scripts/analyze_results.py
@@ -77,10 +88,17 @@ install(DIRECTORY
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-
   find_package(ament_cmake_pytest REQUIRED)
-  ament_add_pytest_test(${PROJECT_NAME}_tests test)
+  
+  # Add linters
+  ament_lint_auto_find_test_dependencies()
+  
+  # Add Python tests
+  ament_add_pytest_test(${PROJECT_NAME}_pytest test
+    APPEND_ENV PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}
+    TIMEOUT 60
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )
 endif()
 
 ament_package()
