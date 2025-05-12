@@ -1,16 +1,28 @@
+# decentralised_controller.launch.py
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, GroupAction
 from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch.conditions import IfCondition, UnlessCondition
 
 def generate_launch_description():
-    """Generate launch description for the decentralized control system"""
+    """Generate launch description for the decentralized control system with experimental parameters"""
     
     # Launch arguments
     robot1_id = LaunchConfiguration('robot1_id', default='1')
     robot2_id = LaunchConfiguration('robot2_id', default='2')
     num_tasks = LaunchConfiguration('num_tasks', default='10')
     dependency_prob = LaunchConfiguration('dependency_prob', default='0.3')
+    
+    # Add experimental parameters
+    delay_ms = LaunchConfiguration('delay_ms', default='0')
+    packet_loss = LaunchConfiguration('packet_loss', default='0.0')
+    epsilon = LaunchConfiguration('epsilon', default='0.05')
+    experiment_id = LaunchConfiguration('experiment_id', default='default')
+    
+    # Add comparative analysis parameter
+    run_comparative = LaunchConfiguration('run_comparative', default='true')
+    comparative_method = LaunchConfiguration('comparative_method', default='CENTRALIZED')
     
     # Add Gazebo model arguments
     robot1_model = LaunchConfiguration('robot1_model', default='waffle_pi')
@@ -47,6 +59,38 @@ def generate_launch_description():
             'robot2_model',
             default_value='waffle_pi',
             description='TurtleBot3 model for robot 2'),
+            
+        # Declare experimental parameters
+        DeclareLaunchArgument(
+            'delay_ms',
+            default_value='0',
+            description='Communication delay in milliseconds'),
+            
+        DeclareLaunchArgument(
+            'packet_loss',
+            default_value='0.0',
+            description='Probability of packet loss'),
+            
+        DeclareLaunchArgument(
+            'epsilon',
+            default_value='0.05',
+            description='Minimum bid increment for auction algorithm'),
+            
+        DeclareLaunchArgument(
+            'experiment_id',
+            default_value='default',
+            description='Unique identifier for this experiment run'),
+            
+        # Comparative analysis parameters
+        DeclareLaunchArgument(
+            'run_comparative',
+            default_value='true',
+            description='Whether to run comparative analysis'),
+            
+        DeclareLaunchArgument(
+            'comparative_method',
+            default_value='CENTRALIZED',
+            description='Method to use for comparative analysis'),
         
         # Launch Gazebo simulation with two TurtleBot3 robots
         ExecuteProcess(
@@ -107,6 +151,18 @@ def generate_launch_description():
             ],
             output='screen'),
             
+        # Communication Middleware
+        Node(
+            package='decentralized_control',
+            executable='communication_middleware',
+            name='communication_middleware',
+            parameters=[{
+                'delay_mean_ms': delay_ms,
+                'delay_stddev_ms': LaunchConfiguration('delay_stddev_ms', default='25'),
+                'packet_loss_prob': packet_loss
+            }],
+            output='screen'),
+            
         # Task Manager Node
         Node(
             package='decentralized_control',
@@ -126,7 +182,7 @@ def generate_launch_description():
             name='auction_node_robot1',
             parameters=[{
                 'robot_id': robot1_id,
-                'epsilon': 0.05,
+                'epsilon': epsilon,
                 'alpha': [0.8, 0.3, 1.0, 1.2, 0.2],
                 'gamma': 0.5,
                 'lambda': 0.1,
@@ -157,6 +213,15 @@ def generate_launch_description():
             }],
             output='screen'),
             
+        Node(
+            package='decentralized_control',
+            executable='execution_controller',
+            name='execution_controller_robot1',
+            parameters=[{
+                'robot_id': robot1_id
+            }],
+            output='screen'),
+            
         # Robot 2 nodes
         Node(
             package='decentralized_control',
@@ -164,7 +229,7 @@ def generate_launch_description():
             name='auction_node_robot2',
             parameters=[{
                 'robot_id': robot2_id,
-                'epsilon': 0.05,
+                'epsilon': epsilon,
                 'alpha': [0.8, 0.3, 1.0, 1.2, 0.2],
                 'gamma': 0.5,
                 'lambda': 0.1,
@@ -192,6 +257,44 @@ def generate_launch_description():
                 'heartbeat_timeout': 3.0,
                 'progress_monitoring_interval': 5.0,
                 'progress_threshold': 0.05
+            }],
+            output='screen'),
+            
+        Node(
+            package='decentralized_control',
+            executable='execution_controller',
+            name='execution_controller_robot2',
+            parameters=[{
+                'robot_id': robot2_id
+            }],
+            output='screen'),
+            
+        # Metrics Collector
+        Node(
+            package='decentralized_control',
+            executable='metrics_collector',
+            name='metrics_collector',
+            parameters=[{
+                'output_dir': LaunchConfiguration('output_dir', default='/tmp/decentralized_control/results'),
+                'experiment_id': experiment_id,
+                'num_tasks': num_tasks,
+                'delay_ms': delay_ms,
+                'packet_loss': packet_loss,
+                'epsilon': epsilon
+            }],
+            output='screen'),
+            
+        # Comparative Analysis
+        Node(
+            package='decentralized_control',
+            executable='comparative_analysis',
+            name='comparative_analysis',
+            condition=IfCondition(run_comparative),
+            parameters=[{
+                'output_dir': LaunchConfiguration('output_dir', default='/tmp/decentralized_control/results'),
+                'allocation_method': comparative_method,
+                'num_tasks': num_tasks,
+                'num_robots': 2
             }],
             output='screen'),
             
