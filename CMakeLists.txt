@@ -23,19 +23,18 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/RecoveryStatus.msg"
   "msg/RobotState.msg"
   "msg/SynchronizationSignal.msg"
-  "msg/Task.msg"
-  "msg/TaskAssignment.msg"
+  "msg/Task.msg"  "msg/TaskAssignment.msg"
   "msg/TaskList.msg"
   "msg/TaskPriority.msg"
   "srv/GetAvailableTasks.srv"
   "srv/InitAuction.srv"
   "srv/SubmitBid.srv"
-  DEPENDENCIES 
-    std_msgs
-    geometry_msgs
-    sensor_msgs
-    nav_msgs
-    action_msgs
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+  nav_msgs
+  action_msgs
 )
 
 rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
