@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(decentralized_control)
 
-# Dependencies
+# Find required packages
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(rclpy REQUIRED)
@@ -12,7 +12,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(action_msgs REQUIRED)
 
-# Generate messages and services
+# Generate interfaces
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Bid.msg"
   "msg/CapabilityUpdate.msg"
@@ -30,41 +30,34 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/GetAvailableTasks.srv"
   "srv/InitAuction.srv"
   "srv/SubmitBid.srv"
-  DEPENDENCIES 
-    std_msgs
-    geometry_msgs 
-    sensor_msgs 
-    nav_msgs 
-    action_msgs
+  DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs action_msgs
 )
 
-# Python package
-ament_package_xml()
-ament_python_install_package(${PROJECT_NAME})
-
-# Install directories
-install(
-  DIRECTORY launch config models worlds
-  DESTINATION share/${PROJECT_NAME}
-)
+# Install Python modules
+ament_python_install_package(decentralized_control)
 
 # Install Python executables
-install(
-  PROGRAMS
-    scripts/analyze_adaptation.py
-    scripts/analyze_results.py
-    scripts/assembly_task_visualiser.py
-    scripts/experiment_runner.py
-    scripts/gazebo_physics_configurator.py
-    scripts/plot_results.py
-    scripts/robot_model_spawner.py
-    scripts/run_experiments.py
+install(PROGRAMS
+  scripts/analyze_adaptation.py
+  scripts/analyze_results.py
+  scripts/assembly_task_visualiser.py
+  scripts/experiment_runner.py
+  scripts/gazebo_physics_configurator.py
+  scripts/plot_results.py
+  scripts/robot_model_spawner.py
+  scripts/run_experiments.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Testing
+# Install directories
+install(DIRECTORY
+  launch config models worlds
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
+  find_package(ament_cmake_pytest REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
 
