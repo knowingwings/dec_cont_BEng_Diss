@@ -41,12 +41,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs action_msgs
 )
 
-# Python installation
-set(PYTHON_INSTALL_DIR lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-
-# Install Python package
-ament_python_install_package(${PROJECT_NAME}
-  PACKAGE_DIR ${PROJECT_NAME}
+# Install Python modules
+ament_python_install_package(
+  ${PROJECT_NAME}
+  PACKAGE_DIR decentralized_control
 )
 
 # Install Python executables
