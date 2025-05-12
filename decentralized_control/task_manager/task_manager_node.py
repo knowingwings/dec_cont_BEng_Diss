@@ -6,8 +6,8 @@ import numpy as np
 import time
 from threading import Lock
 
-from decentralized_control.msg import Task, TaskList, TaskAssignment
-from decentralized_control.srv import GetAvailableTasks
+from dec_control.msg import Task, TaskList, TaskAssignment
+from dec_control.srv import GetAvailableTasks
 
 class TaskManagerNode(Node):
     """

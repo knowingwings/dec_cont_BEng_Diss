@@ -5,7 +5,7 @@ from rclpy.node import Node
 import time
 from threading import Lock
 
-from decentralized_control.msg import Heartbeat, RobotState, TaskAssignment
+from dec_control.msg import Heartbeat, RobotState, TaskAssignment
 
 class RecoveryNode(Node):
     """

@@ -9,7 +9,7 @@ from threading import Thread
 
 from decentralized_control.auction.bid_calculator import BidCalculator
 from decentralized_control.auction.auction_node import AuctionNode
-from decentralized_control.msg import Task, TaskList, Bid, TaskAssignment, RobotState
+from dec_control.msg import Task, TaskList, Bid, TaskAssignment, RobotState
 
 class TestTaskPublisher(Node):
     """Test node for publishing tasks."""

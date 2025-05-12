@@ -5,7 +5,7 @@ from rclpy.node import Node
 import numpy as np
 import time
 
-from decentralized_control.msg import RobotState, TaskAssignment
+from dec_control.msg import RobotState, TaskAssignment
 
 class ConsensusNode(Node):
     """

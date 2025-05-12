@@ -7,7 +7,7 @@ import time
 from threading import Thread
 
 from decentralized_control.recovery.recovery_node import RecoveryNode
-from decentralized_control.msg import Heartbeat, RobotState, TaskAssignment
+from dec_control.msg import Heartbeat, RobotState, TaskAssignment
 
 class TestRecovery(unittest.TestCase):
     @classmethod
