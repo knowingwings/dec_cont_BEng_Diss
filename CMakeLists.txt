@@ -30,6 +30,16 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/GetAvailableTasks.srv"
   "srv/InitAuction.srv"
   "srv/SubmitBid.srv"
+  DEPENDENCIES 
+    std_msgs
+    geometry_msgs
+    sensor_msgs
+    nav_msgs
+    action_msgs
+)
+
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  "srv/SubmitBid.srv"
   DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs action_msgs
 )
 
