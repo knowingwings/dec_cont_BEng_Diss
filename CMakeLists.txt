@@ -1,23 +1,18 @@
 cmake_minimum_required(VERSION 3.8)
 project(decentralized_control)
 
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
-
-# Find dependencies
+# Dependencies
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(rclpy REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(action_msgs REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
 
-# Generate ROS2 interfaces
+# Generate messages and services
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Bid.msg"
   "msg/CapabilityUpdate.msg"
@@ -37,48 +32,40 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SubmitBid.srv"
   DEPENDENCIES 
     std_msgs
-    geometry_msgs
-    sensor_msgs
-    nav_msgs
+    geometry_msgs 
+    sensor_msgs 
+    nav_msgs 
     action_msgs
 )
 
-# Configure Python
-ament_python_install_package(
-  ${PROJECT_NAME}
+# Python package
+ament_package_xml()
+ament_python_install_package(${PROJECT_NAME})
+
+# Install directories
+install(
+  DIRECTORY launch config models worlds
+  DESTINATION share/${PROJECT_NAME}
 )
 
 # Install Python executables
-install(PROGRAMS
-  scripts/analyze_adaptation.py
-  scripts/analyze_results.py
-  scripts/assembly_task_visualiser.py
-  scripts/experiment_runner.py
-  scripts/gazebo_physics_configurator.py
-  scripts/plot_results.py
-  scripts/robot_model_spawner.py
-  scripts/run_experiments.py
+install(
+  PROGRAMS
+    scripts/analyze_adaptation.py
+    scripts/analyze_results.py
+    scripts/assembly_task_visualiser.py
+    scripts/experiment_runner.py
+    scripts/gazebo_physics_configurator.py
+    scripts/plot_results.py
+    scripts/robot_model_spawner.py
+    scripts/run_experiments.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install launch, config, models and worlds
-install(DIRECTORY
-  launch
-  config
-  models
-  worlds
-  DESTINATION share/${PROJECT_NAME}/
-)
-
+# Testing
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  find_package(ament_cmake_pytest REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
-
-# Export dependencies
-ament_export_dependencies(rosidl_default_runtime)
-ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME})
 
 ament_package()
