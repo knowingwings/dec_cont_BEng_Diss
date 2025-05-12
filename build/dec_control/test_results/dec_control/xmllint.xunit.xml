@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite
+  name="dec_control.xmllint"
+  tests="12"
+  errors="0"
+  failures="2"
+  time="0.666"
+>
+  <testcase
+    name="package.xml"
+    classname="dec_control.xmllint"
+  >
+      <failure message="Diff with 291 lines"><![CDATA[/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/package.xml:24: element test_depend: Schemas validity error : Element 'test_depend': This element is not expected. Expected is one of ( member_of_group, export ).
+/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/package.xml fails to validate
+]]></failure>
+  </testcase>
+  <testcase
+    name="build/dec_control/Testing/20250512-2056/Test.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/Testing/20250512-2057/Test.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/copyright.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/cppcheck.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/cpplint.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/flake8.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/lint_cmake.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/pep257.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/uncrustify.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="build/dec_control/test_results/dec_control/xmllint.xunit.xml"
+    classname="dec_control.xmllint"/>
+  <testcase
+    name="install/dec_control/share/dec_control/package.xml"
+    classname="dec_control.xmllint"
+  >
+      <failure message="Diff with 367 lines"><![CDATA[/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/install/dec_control/share/dec_control/package.xml:24: element test_depend: Schemas validity error : Element 'test_depend': This element is not expected. Expected is one of ( member_of_group, export ).
+/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/install/dec_control/share/dec_control/package.xml fails to validate
+]]></failure>
+  </testcase>
+  <system-out>Checked files:
+* package.xml
+* build/dec_control/Testing/20250512-2056/Test.xml
+* build/dec_control/Testing/20250512-2057/Test.xml
+* build/dec_control/test_results/dec_control/copyright.xunit.xml
+* build/dec_control/test_results/dec_control/cppcheck.xunit.xml
+* build/dec_control/test_results/dec_control/cpplint.xunit.xml
+* build/dec_control/test_results/dec_control/flake8.xunit.xml
+* build/dec_control/test_results/dec_control/lint_cmake.xunit.xml
+* build/dec_control/test_results/dec_control/pep257.xunit.xml
+* build/dec_control/test_results/dec_control/uncrustify.xunit.xml
+* build/dec_control/test_results/dec_control/xmllint.xunit.xml
+* install/dec_control/share/dec_control/package.xml</system-out>
+</testsuite>

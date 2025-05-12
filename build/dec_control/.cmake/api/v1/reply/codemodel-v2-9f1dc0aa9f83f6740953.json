@@ -1,0 +1,251 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-c44cad69dae28d581206.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19
+					]
+				},
+				{
+					"build" : "dec_control__py",
+					"jsonFile" : "directory-dec_control__py-630c09e3d20e78e1b3c0.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "build/dec_control/dec_control__py",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "dec_control",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_dec_control_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_dec_control_egg-228c9510f338d9e4a5e8.json",
+					"name" : "ament_cmake_python_build_dec_control_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_decentralized_control_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_decentralized_control_egg-9b4500870807239cd5c4.json",
+					"name" : "ament_cmake_python_build_decentralized_control_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_dec_control::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_dec_control-02e054e6b71a35654246.json",
+					"name" : "ament_cmake_python_copy_dec_control",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_decentralized_control::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_decentralized_control-4464bde38202b25b6b96.json",
+					"name" : "ament_cmake_python_copy_decentralized_control",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control-abaaf561d2fbf776f67c.json",
+					"name" : "dec_control",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__cpp-36cb9275be98f8e9aded.json",
+					"name" : "dec_control__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "dec_control__py::@1d7441b9bacad5b71a41",
+					"jsonFile" : "target-dec_control__py-064acfdf65cb26ecb764.json",
+					"name" : "dec_control__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_generator_c-af26b622e33fdbf89853.json",
+					"name" : "dec_control__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_generator_py-8f91a83e3d580e67b0b7.json",
+					"name" : "dec_control__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_c-0b57618c46fb97730f16.json",
+					"name" : "dec_control__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_c__pyext-e71d86f502861f90a46d.json",
+					"name" : "dec_control__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_cpp-9aea9ca42f8b1b050f8e.json",
+					"name" : "dec_control__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_fastrtps_c-118bf50dc968c8900c5b.json",
+					"name" : "dec_control__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_fastrtps_c__pyext-64a1e2da3b3f8d41ccec.json",
+					"name" : "dec_control__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_fastrtps_cpp-632d37d256e401103766.json",
+					"name" : "dec_control__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_introspection_c-634f5fe21fd835d5ca34.json",
+					"name" : "dec_control__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_introspection_c__pyext-50df9d4810cae4703586.json",
+					"name" : "dec_control__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control__rosidl_typesupport_introspection_cpp-eb40dabd90ab5315674a.json",
+					"name" : "dec_control__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dec_control_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dec_control_uninstall-514070c8f9fecb5117eb.json",
+					"name" : "dec_control_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-bf7463acea76f1e95358.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control",
+		"source" : "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

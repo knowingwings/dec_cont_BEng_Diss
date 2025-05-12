@@ -1,0 +1,32 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from dec_control/msg/NetworkTopology.msg
+// generated code does not contain a copyright notice
+
+
+module dec_control {
+  module msg {
+    @verbatim (language="comment", text=
+      "msg/NetworkTopology.msg")
+    struct NetworkTopology {
+      int32 num_robots;
+
+      sequence<float> adjacency_matrix;
+
+      @verbatim (language="comment", text=
+        "Quality metric for each link (0-1)")
+      sequence<float> link_quality;
+
+      @verbatim (language="comment", text=
+        "Communication latency for each link in seconds")
+      sequence<float> link_latency;
+
+      @verbatim (language="comment", text=
+        "Reliability metric for each link (0-1)")
+      sequence<float> link_reliability;
+
+      @verbatim (language="comment", text=
+        "Timestamp in milliseconds")
+      int64 timestamp;
+    };
+  };
+};

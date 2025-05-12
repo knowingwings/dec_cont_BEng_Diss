@@ -1,0 +1,20 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from dec_control/msg/Bid.msg
+// generated code does not contain a copyright notice
+
+
+module dec_control {
+  module msg {
+    @verbatim (language="comment", text=
+      "Bid information")
+    struct Bid {
+      int32 robot_id;
+
+      int32 task_id;
+
+      double bid_value;
+
+      double utility;
+    };
+  };
+};

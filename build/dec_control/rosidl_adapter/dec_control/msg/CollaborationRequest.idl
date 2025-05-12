@@ -1,0 +1,22 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from dec_control/msg/CollaborationRequest.msg
+// generated code does not contain a copyright notice
+
+
+module dec_control {
+  module msg {
+    @verbatim (language="comment", text=
+      "msg/CollaborationRequest.msg")
+    struct CollaborationRequest {
+      int32 task_id;
+
+      int32 robot_id;
+
+      double leadership_score;
+
+      @verbatim (language="comment", text=
+        "milliseconds since epoch")
+      int64 timestamp;
+    };
+  };
+};

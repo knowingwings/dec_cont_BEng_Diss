@@ -1,0 +1,608 @@
+-- run_test.py: invoking following command in '/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss':
+ - /opt/ros/humble/bin/ament_pep257 --xunit-file /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/test_results/dec_control/pep257.xunit.xml
+
+checking ./build/dec_control/ament_cmake_python/dec_control/dec_control/__init__.py
+checking ./build/dec_control/ament_cmake_python/dec_control/setup.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/__init__.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/__init__.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:16 in public class `AuctionNode`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:145 in public method `task_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:145 in public method `task_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:164 in public method `bid_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:164 in public method `bid_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:182 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:182 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:207 in public method `robot_state_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:207 in public method `robot_state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:216 in public method `heartbeat_callback`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:216 in public method `heartbeat_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:220 in public method `init_auction_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:220 in public method `init_auction_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:238 in public method `submit_bid_callback`: D400: First line should end with a period (not 'd')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:238 in public method `submit_bid_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'd')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:266 in public method `get_available_tasks_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:266 in public method `get_available_tasks_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:271 in public method `auction_step_callback`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:271 in public method `auction_step_callback`: D401: First line should be in imperative mood; try rephrasing (found 'Main')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:480 in public method `calculate_bid`: D400: First line should end with a period (not 'k')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:480 in public method `calculate_bid`: D415: First line should end with a period, question mark, or exclamation point (not 'k')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:581 in public method `process_bid`: D400: First line should end with a period (not ')')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:581 in public method `process_bid`: D415: First line should end with a period, question mark, or exclamation point (not ')')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:608 in public method `update_available_tasks`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:608 in public method `update_available_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:626 in public method `calculate_robot_workloads`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:626 in public method `calculate_robot_workloads`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:639 in public method `initiate_recovery`: D400: First line should end with a period (not 'e')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:639 in public method `initiate_recovery`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:695 in public method `publish_assignments`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:695 in public method `publish_assignments`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:706 in public method `send_heartbeat`: D400: First line should end with a period (not 'l')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:706 in public method `send_heartbeat`: D415: First line should end with a period, question mark, or exclamation point (not 'l')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:718 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_node.py:718 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/auction_utils.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:6 in public class `BidCalculator`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D413: Missing blank line after last section ('Parameters')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D409: Section underline should match the length of its name (Expected 10 dashes in section 'Parameters', got 11)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D406: Section name should end with a newline ('Parameters', not 'Parameters:')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D409: Section underline should match the length of its name (Expected 10 dashes in section 'Parameters', got 11)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D406: Section name should end with a newline ('Parameters', not 'Parameters:')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D413: Missing blank line after last section ('Returns')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D409: Section underline should match the length of its name (Expected 7 dashes in section 'Returns', got 8)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D406: Section name should end with a newline ('Returns', not 'Returns:')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/communication_middleware.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:15 in public class `AllocationMethod`: D204: 1 blank line required after class docstring (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:22 in public class `ComparativeAnalysis`: D200: One-line docstring should fit on one line with quotes (found 3)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:108 in public method `centralized_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:164 in public method `greedy_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:202 in public method `market_based_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:256 in public method `sequential_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/__init__.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D400: First line should end with a period (not 'g')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D415: First line should end with a period, question mark, or exclamation point (not 'g')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:62 in public method `state_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:62 in public method `state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:85 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:85 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:90 in public method `consensus_update_callback`: D400: First line should end with a period (not 'e')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:90 in public method `consensus_update_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:114 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/consensus_node.py:114 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/time_varying_consensus.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D400: First line should end with a period (not 'r')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D415: First line should end with a period, question mark, or exclamation point (not 'r')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/consensus/time_varying_consensus.py:164 in public method `asynchronous_update_callback`: D205: 1 blank line required between summary line and description (found 0)
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/__init__.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/collaborative_task_executor.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/collaborative_task_executor.py:13 in public class `CollaborativeTaskExecutor`: D200: One-line docstring should fit on one line with quotes (found 3)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/collaborative_task_executor.py:151 in public method `collab_request_callback`: D205: 1 blank line required between summary line and description (found 0)
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:20 in public class `MetricsCollector`: D200: One-line docstring should fit on one line with quotes (found 3)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:207 in public class `ExecutionController`: D200: One-line docstring should fit on one line with quotes (found 3)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:305 in public method `task_callback`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:305 in public method `task_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:311 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:311 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:372 in public method `execution_step`: D400: First line should end with a period (not 'k')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:372 in public method `execution_step`: D415: First line should end with a period, question mark, or exclamation point (not 'k')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:393 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/execution_controller.py:393 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/force_control_manager.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/timed_automata_executor.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/timed_automata_executor.py:16 in public class `State`: D204: 1 blank line required after class docstring (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D400: First line should end with a period (not 'm')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D415: First line should end with a period, question mark, or exclamation point (not 'm')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/experiment_runner.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/experiment_runner.py:16 in public class `ExperimentRunner`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/industrial_scenarios.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D400: First line should end with a period (not ' ')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D415: First line should end with a period, question mark, or exclamation point (not ' ')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/math_proof_validatior.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D400: First line should end with a period (not 'm')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D415: First line should end with a period, question mark, or exclamation point (not 'm')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/metrics_collector.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/metrics_collector.py:19 in public class `MetricsCollector`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/__init__.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/partial_failure_recovery.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D400: First line should end with a period (not 'e')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:11 in public class `RecoveryNode`: D200: One-line docstring should fit on one line with quotes (found 3)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:79 in public method `heartbeat_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:79 in public method `heartbeat_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:92 in public method `robot_state_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:92 in public method `robot_state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:106 in public method `assignment_callback`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:106 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:131 in public method `monitor_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:131 in public method `monitor_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:161 in public method `send_heartbeat`: D400: First line should end with a period (not 'l')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:161 in public method `send_heartbeat`: D415: First line should end with a period, question mark, or exclamation point (not 'l')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:170 in public method `initiate_recovery`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:170 in public method `initiate_recovery`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:182 in public method `check_task_progress`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/recovery/recovery_node.py:182 in public method `check_task_progress`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/__init__.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/critical_path_analyzer.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D400: First line should end with a period (not ')')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D415: First line should end with a period, question mark, or exclamation point (not ')')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/critical_path_analyzer.py:128 in public method `forward_pass`: D205: 1 blank line required between summary line and description (found 0)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/critical_path_analyzer.py:176 in public method `backward_pass`: D205: 1 blank line required between summary line and description (found 0)
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:13 in public class `TaskManagerNode`: D200: One-line docstring should fit on one line with quotes (found 3)
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:62 in public method `create_tasks`: D400: First line should end with a period (not 't')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:62 in public method `create_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 't')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:137 in public method `add_task_dependencies`: D400: First line should end with a period (not 'h')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:137 in public method `add_task_dependencies`: D415: First line should end with a period, question mark, or exclamation point (not 'h')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:186 in public method `update_available_tasks`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:186 in public method `update_available_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:205 in public method `publish_tasks`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:205 in public method `publish_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:212 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:212 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:226 in public method `get_available_tasks_callback`: D400: First line should end with a period (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:226 in public method `get_available_tasks_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:232 in public method `task_update_callback`: D400: First line should end with a period (not 'n')
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/task_manager/task_manager_node.py:232 in public method `task_update_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/utils/__init__.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/utils/robot_utils.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/utils/task_dependency_analyzer.py
+./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/utils/task_dependency_analyzer.py:12 in public class `TaskDependencyAnalyzer`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./build/dec_control/ament_cmake_python/decentralized_control/decentralized_control/utils/task_utils.py
+checking ./build/dec_control/ament_cmake_python/decentralized_control/setup.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/__init__.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/__init__.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_bid.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_capability_update.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_collaboration_request.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_collaboration_response.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_heartbeat.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_network_topology.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_recovery_status.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_robot_state.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_synchronization_signal.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_task.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_task_assignment.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_task_list.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/msg/_task_priority.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/srv/__init__.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/srv/_get_available_tasks.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/srv/_init_auction.py
+checking ./build/dec_control/rosidl_generator_py/dec_control/srv/_submit_bid.py
+checking ./decentralized_control/__init__.py
+checking ./decentralized_control/auction/__init__.py
+checking ./decentralized_control/auction/auction_node.py
+./decentralized_control/auction/auction_node.py:16 in public class `AuctionNode`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/auction/auction_node.py:145 in public method `task_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:145 in public method `task_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:164 in public method `bid_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:164 in public method `bid_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:182 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:182 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:207 in public method `robot_state_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:207 in public method `robot_state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:216 in public method `heartbeat_callback`: D400: First line should end with a period (not 'n')
+./decentralized_control/auction/auction_node.py:216 in public method `heartbeat_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./decentralized_control/auction/auction_node.py:220 in public method `init_auction_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:220 in public method `init_auction_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:238 in public method `submit_bid_callback`: D400: First line should end with a period (not 'd')
+./decentralized_control/auction/auction_node.py:238 in public method `submit_bid_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'd')
+./decentralized_control/auction/auction_node.py:266 in public method `get_available_tasks_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:266 in public method `get_available_tasks_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:271 in public method `auction_step_callback`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/auction/auction_node.py:271 in public method `auction_step_callback`: D401: First line should be in imperative mood; try rephrasing (found 'Main')
+./decentralized_control/auction/auction_node.py:480 in public method `calculate_bid`: D400: First line should end with a period (not 'k')
+./decentralized_control/auction/auction_node.py:480 in public method `calculate_bid`: D415: First line should end with a period, question mark, or exclamation point (not 'k')
+./decentralized_control/auction/auction_node.py:581 in public method `process_bid`: D400: First line should end with a period (not ')')
+./decentralized_control/auction/auction_node.py:581 in public method `process_bid`: D415: First line should end with a period, question mark, or exclamation point (not ')')
+./decentralized_control/auction/auction_node.py:608 in public method `update_available_tasks`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:608 in public method `update_available_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:626 in public method `calculate_robot_workloads`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:626 in public method `calculate_robot_workloads`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:639 in public method `initiate_recovery`: D400: First line should end with a period (not 'e')
+./decentralized_control/auction/auction_node.py:639 in public method `initiate_recovery`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+./decentralized_control/auction/auction_node.py:695 in public method `publish_assignments`: D400: First line should end with a period (not 's')
+./decentralized_control/auction/auction_node.py:695 in public method `publish_assignments`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/auction/auction_node.py:706 in public method `send_heartbeat`: D400: First line should end with a period (not 'l')
+./decentralized_control/auction/auction_node.py:706 in public method `send_heartbeat`: D415: First line should end with a period, question mark, or exclamation point (not 'l')
+./decentralized_control/auction/auction_node.py:718 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./decentralized_control/auction/auction_node.py:718 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./decentralized_control/auction/auction_utils.py
+checking ./decentralized_control/auction/bid_calculator.py
+./decentralized_control/auction/bid_calculator.py:6 in public class `BidCalculator`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D413: Missing blank line after last section ('Parameters')
+./decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D409: Section underline should match the length of its name (Expected 10 dashes in section 'Parameters', got 11)
+./decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D406: Section name should end with a newline ('Parameters', not 'Parameters:')
+./decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D409: Section underline should match the length of its name (Expected 10 dashes in section 'Parameters', got 11)
+./decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D406: Section name should end with a newline ('Parameters', not 'Parameters:')
+./decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D413: Missing blank line after last section ('Returns')
+./decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D409: Section underline should match the length of its name (Expected 7 dashes in section 'Returns', got 8)
+./decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D406: Section name should end with a newline ('Returns', not 'Returns:')
+checking ./decentralized_control/communication_middleware.py
+checking ./decentralized_control/comparative_analysis.py
+./decentralized_control/comparative_analysis.py:15 in public class `AllocationMethod`: D204: 1 blank line required after class docstring (found 0)
+./decentralized_control/comparative_analysis.py:22 in public class `ComparativeAnalysis`: D200: One-line docstring should fit on one line with quotes (found 3)
+./decentralized_control/comparative_analysis.py:108 in public method `centralized_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/comparative_analysis.py:164 in public method `greedy_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/comparative_analysis.py:202 in public method `market_based_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/comparative_analysis.py:256 in public method `sequential_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D400: First line should end with a period (not 's')
+./decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./decentralized_control/consensus/__init__.py
+checking ./decentralized_control/consensus/consensus_node.py
+./decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D400: First line should end with a period (not 'g')
+./decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D415: First line should end with a period, question mark, or exclamation point (not 'g')
+./decentralized_control/consensus/consensus_node.py:62 in public method `state_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/consensus/consensus_node.py:62 in public method `state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/consensus/consensus_node.py:85 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/consensus/consensus_node.py:85 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/consensus/consensus_node.py:90 in public method `consensus_update_callback`: D400: First line should end with a period (not 'e')
+./decentralized_control/consensus/consensus_node.py:90 in public method `consensus_update_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+./decentralized_control/consensus/consensus_node.py:114 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./decentralized_control/consensus/consensus_node.py:114 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./decentralized_control/consensus/time_varying_consensus.py
+./decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D400: First line should end with a period (not 'r')
+./decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D415: First line should end with a period, question mark, or exclamation point (not 'r')
+./decentralized_control/consensus/time_varying_consensus.py:164 in public method `asynchronous_update_callback`: D205: 1 blank line required between summary line and description (found 0)
+checking ./decentralized_control/execution/__init__.py
+checking ./decentralized_control/execution/collaborative_task_executor.py
+./decentralized_control/execution/collaborative_task_executor.py:13 in public class `CollaborativeTaskExecutor`: D200: One-line docstring should fit on one line with quotes (found 3)
+./decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/execution/collaborative_task_executor.py:151 in public method `collab_request_callback`: D205: 1 blank line required between summary line and description (found 0)
+checking ./decentralized_control/execution/execution_controller.py
+./decentralized_control/execution/execution_controller.py:20 in public class `MetricsCollector`: D200: One-line docstring should fit on one line with quotes (found 3)
+./decentralized_control/execution/execution_controller.py:207 in public class `ExecutionController`: D200: One-line docstring should fit on one line with quotes (found 3)
+./decentralized_control/execution/execution_controller.py:305 in public method `task_callback`: D400: First line should end with a period (not 'n')
+./decentralized_control/execution/execution_controller.py:305 in public method `task_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./decentralized_control/execution/execution_controller.py:311 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/execution/execution_controller.py:311 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/execution/execution_controller.py:372 in public method `execution_step`: D400: First line should end with a period (not 'k')
+./decentralized_control/execution/execution_controller.py:372 in public method `execution_step`: D415: First line should end with a period, question mark, or exclamation point (not 'k')
+./decentralized_control/execution/execution_controller.py:393 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./decentralized_control/execution/execution_controller.py:393 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./decentralized_control/execution/force_control_manager.py
+./decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D400: First line should end with a period (not 'n')
+./decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./decentralized_control/execution/timed_automata_executor.py
+./decentralized_control/execution/timed_automata_executor.py:16 in public class `State`: D204: 1 blank line required after class docstring (found 0)
+./decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D400: First line should end with a period (not 'm')
+./decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D415: First line should end with a period, question mark, or exclamation point (not 'm')
+checking ./decentralized_control/experiment_runner.py
+./decentralized_control/experiment_runner.py:16 in public class `ExperimentRunner`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./decentralized_control/industrial_scenarios.py
+./decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D400: First line should end with a period (not ' ')
+./decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D415: First line should end with a period, question mark, or exclamation point (not ' ')
+checking ./decentralized_control/math_proof_validatior.py
+./decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D400: First line should end with a period (not 'm')
+./decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D415: First line should end with a period, question mark, or exclamation point (not 'm')
+checking ./decentralized_control/metrics_collector.py
+./decentralized_control/metrics_collector.py:19 in public class `MetricsCollector`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./decentralized_control/recovery/__init__.py
+checking ./decentralized_control/recovery/partial_failure_recovery.py
+./decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D400: First line should end with a period (not 's')
+./decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D400: First line should end with a period (not 'e')
+./decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+checking ./decentralized_control/recovery/recovery_node.py
+./decentralized_control/recovery/recovery_node.py:11 in public class `RecoveryNode`: D200: One-line docstring should fit on one line with quotes (found 3)
+./decentralized_control/recovery/recovery_node.py:79 in public method `heartbeat_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/recovery/recovery_node.py:79 in public method `heartbeat_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/recovery/recovery_node.py:92 in public method `robot_state_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/recovery/recovery_node.py:92 in public method `robot_state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/recovery/recovery_node.py:106 in public method `assignment_callback`: D400: First line should end with a period (not 'n')
+./decentralized_control/recovery/recovery_node.py:106 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./decentralized_control/recovery/recovery_node.py:131 in public method `monitor_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/recovery/recovery_node.py:131 in public method `monitor_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/recovery/recovery_node.py:161 in public method `send_heartbeat`: D400: First line should end with a period (not 'l')
+./decentralized_control/recovery/recovery_node.py:161 in public method `send_heartbeat`: D415: First line should end with a period, question mark, or exclamation point (not 'l')
+./decentralized_control/recovery/recovery_node.py:170 in public method `initiate_recovery`: D400: First line should end with a period (not 's')
+./decentralized_control/recovery/recovery_node.py:170 in public method `initiate_recovery`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/recovery/recovery_node.py:182 in public method `check_task_progress`: D400: First line should end with a period (not 's')
+./decentralized_control/recovery/recovery_node.py:182 in public method `check_task_progress`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./decentralized_control/task_manager/__init__.py
+checking ./decentralized_control/task_manager/critical_path_analyzer.py
+./decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D400: First line should end with a period (not ')')
+./decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D415: First line should end with a period, question mark, or exclamation point (not ')')
+./decentralized_control/task_manager/critical_path_analyzer.py:128 in public method `forward_pass`: D205: 1 blank line required between summary line and description (found 0)
+./decentralized_control/task_manager/critical_path_analyzer.py:176 in public method `backward_pass`: D205: 1 blank line required between summary line and description (found 0)
+checking ./decentralized_control/task_manager/task_manager_node.py
+./decentralized_control/task_manager/task_manager_node.py:13 in public class `TaskManagerNode`: D200: One-line docstring should fit on one line with quotes (found 3)
+./decentralized_control/task_manager/task_manager_node.py:62 in public method `create_tasks`: D400: First line should end with a period (not 't')
+./decentralized_control/task_manager/task_manager_node.py:62 in public method `create_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 't')
+./decentralized_control/task_manager/task_manager_node.py:137 in public method `add_task_dependencies`: D400: First line should end with a period (not 'h')
+./decentralized_control/task_manager/task_manager_node.py:137 in public method `add_task_dependencies`: D415: First line should end with a period, question mark, or exclamation point (not 'h')
+./decentralized_control/task_manager/task_manager_node.py:186 in public method `update_available_tasks`: D400: First line should end with a period (not 's')
+./decentralized_control/task_manager/task_manager_node.py:186 in public method `update_available_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/task_manager/task_manager_node.py:205 in public method `publish_tasks`: D400: First line should end with a period (not 'n')
+./decentralized_control/task_manager/task_manager_node.py:205 in public method `publish_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./decentralized_control/task_manager/task_manager_node.py:212 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/task_manager/task_manager_node.py:212 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/task_manager/task_manager_node.py:226 in public method `get_available_tasks_callback`: D400: First line should end with a period (not 's')
+./decentralized_control/task_manager/task_manager_node.py:226 in public method `get_available_tasks_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./decentralized_control/task_manager/task_manager_node.py:232 in public method `task_update_callback`: D400: First line should end with a period (not 'n')
+./decentralized_control/task_manager/task_manager_node.py:232 in public method `task_update_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./decentralized_control/utils/__init__.py
+checking ./decentralized_control/utils/robot_utils.py
+checking ./decentralized_control/utils/task_dependency_analyzer.py
+./decentralized_control/utils/task_dependency_analyzer.py:12 in public class `TaskDependencyAnalyzer`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./decentralized_control/utils/task_utils.py
+checking ./install/_local_setup_util_ps1.py
+checking ./install/_local_setup_util_sh.py
+checking ./install/dec_control/lib/dec_control/analyze_adaptation.py
+checking ./install/dec_control/lib/dec_control/analyze_results.py
+checking ./install/dec_control/lib/dec_control/assembly_task_visualiser.py
+./install/dec_control/lib/dec_control/assembly_task_visualiser.py:15 in public class `AssemblyTaskVisualizer`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./install/dec_control/lib/dec_control/experiment_runner.py
+./install/dec_control/lib/dec_control/experiment_runner.py:17 in public class `ExperimentRunner`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./install/dec_control/lib/dec_control/gazebo_physics_configurator.py
+./install/dec_control/lib/dec_control/gazebo_physics_configurator.py:12 in public class `GazeboPhysicsConfigurator`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/dec_control/gazebo_physics_configurator.py:106 in public method `physics_callback`: D401: First line should be in imperative mood; try rephrasing (found 'Callback')
+checking ./install/dec_control/lib/dec_control/plot_results.py
+checking ./install/dec_control/lib/dec_control/robot_model_spawner.py
+./install/dec_control/lib/dec_control/robot_model_spawner.py:12 in public class `RobotModelSpawner`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/dec_control/robot_model_spawner.py:120 in public method `spawn_callback`: D401: First line should be in imperative mood; try rephrasing (found 'Callback')
+checking ./install/dec_control/lib/dec_control/run_experiments.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_bid.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_capability_update.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_collaboration_request.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_collaboration_response.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_heartbeat.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_network_topology.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_recovery_status.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_robot_state.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_synchronization_signal.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_task.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_task_assignment.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_task_list.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/msg/_task_priority.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/srv/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/srv/_get_available_tasks.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/srv/_init_auction.py
+checking ./install/dec_control/lib/python3.10/site-packages/dec_control/srv/_submit_bid.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:16 in public class `AuctionNode`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:145 in public method `task_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:145 in public method `task_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:164 in public method `bid_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:164 in public method `bid_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:182 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:182 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:207 in public method `robot_state_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:207 in public method `robot_state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:216 in public method `heartbeat_callback`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:216 in public method `heartbeat_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:220 in public method `init_auction_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:220 in public method `init_auction_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:238 in public method `submit_bid_callback`: D400: First line should end with a period (not 'd')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:238 in public method `submit_bid_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'd')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:266 in public method `get_available_tasks_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:266 in public method `get_available_tasks_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:271 in public method `auction_step_callback`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:271 in public method `auction_step_callback`: D401: First line should be in imperative mood; try rephrasing (found 'Main')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:480 in public method `calculate_bid`: D400: First line should end with a period (not 'k')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:480 in public method `calculate_bid`: D415: First line should end with a period, question mark, or exclamation point (not 'k')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:581 in public method `process_bid`: D400: First line should end with a period (not ')')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:581 in public method `process_bid`: D415: First line should end with a period, question mark, or exclamation point (not ')')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:608 in public method `update_available_tasks`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:608 in public method `update_available_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:626 in public method `calculate_robot_workloads`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:626 in public method `calculate_robot_workloads`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:639 in public method `initiate_recovery`: D400: First line should end with a period (not 'e')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:639 in public method `initiate_recovery`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:695 in public method `publish_assignments`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:695 in public method `publish_assignments`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:706 in public method `send_heartbeat`: D400: First line should end with a period (not 'l')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:706 in public method `send_heartbeat`: D415: First line should end with a period, question mark, or exclamation point (not 'l')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:718 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_node.py:718 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/auction_utils.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:6 in public class `BidCalculator`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D413: Missing blank line after last section ('Parameters')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D409: Section underline should match the length of its name (Expected 10 dashes in section 'Parameters', got 11)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:12 in public method `__init__`: D406: Section name should end with a newline ('Parameters', not 'Parameters:')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D409: Section underline should match the length of its name (Expected 10 dashes in section 'Parameters', got 11)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D406: Section name should end with a newline ('Parameters', not 'Parameters:')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D413: Missing blank line after last section ('Returns')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D409: Section underline should match the length of its name (Expected 7 dashes in section 'Returns', got 8)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/auction/bid_calculator.py:29 in public method `calculate_bid`: D406: Section name should end with a newline ('Returns', not 'Returns:')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/communication_middleware.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:15 in public class `AllocationMethod`: D204: 1 blank line required after class docstring (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:22 in public class `ComparativeAnalysis`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:108 in public method `centralized_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:164 in public method `greedy_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:202 in public method `market_based_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:256 in public method `sequential_allocation`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/comparative_analysis.py:340 in public class `ConsensusComparativeAnalysis`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D400: First line should end with a period (not 'g')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:11 in public class `ConsensusNode`: D415: First line should end with a period, question mark, or exclamation point (not 'g')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:62 in public method `state_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:62 in public method `state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:85 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:85 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:90 in public method `consensus_update_callback`: D400: First line should end with a period (not 'e')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:90 in public method `consensus_update_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:114 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/consensus_node.py:114 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/time_varying_consensus.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D400: First line should end with a period (not 'r')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/time_varying_consensus.py:14 in public class `TimeVaryingConsensusNode`: D415: First line should end with a period, question mark, or exclamation point (not 'r')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/consensus/time_varying_consensus.py:164 in public method `asynchronous_update_callback`: D205: 1 blank line required between summary line and description (found 0)
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/collaborative_task_executor.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/collaborative_task_executor.py:13 in public class `CollaborativeTaskExecutor`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/collaborative_task_executor.py:97 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/collaborative_task_executor.py:151 in public method `collab_request_callback`: D205: 1 blank line required between summary line and description (found 0)
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:20 in public class `MetricsCollector`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:207 in public class `ExecutionController`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:305 in public method `task_callback`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:305 in public method `task_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:311 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:311 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:372 in public method `execution_step`: D400: First line should end with a period (not 'k')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:372 in public method `execution_step`: D415: First line should end with a period, question mark, or exclamation point (not 'k')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:393 in public method `publish_state`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/execution_controller.py:393 in public method `publish_state`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/force_control_manager.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/force_control_manager.py:16 in public class `ForceControlManager`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/timed_automata_executor.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/timed_automata_executor.py:16 in public class `State`: D204: 1 blank line required after class docstring (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D400: First line should end with a period (not 'm')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/execution/timed_automata_executor.py:24 in public class `TimedAutomataExecutor`: D415: First line should end with a period, question mark, or exclamation point (not 'm')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/experiment_runner.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/experiment_runner.py:16 in public class `ExperimentRunner`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/industrial_scenarios.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D400: First line should end with a period (not ' ')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/industrial_scenarios.py:13 in public class `IndustrialScenarioGenerator`: D415: First line should end with a period, question mark, or exclamation point (not ' ')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/math_proof_validatior.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D400: First line should end with a period (not 'm')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/math_proof_validatior.py:16 in public class `MathProofValidator`: D415: First line should end with a period, question mark, or exclamation point (not 'm')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/metrics_collector.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/metrics_collector.py:19 in public class `MetricsCollector`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/partial_failure_recovery.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/partial_failure_recovery.py:14 in public class `PartialFailureRecoveryNode`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D400: First line should end with a period (not 'e')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/partial_failure_recovery.py:180 in public method `evaluate_task_feasibility`: D415: First line should end with a period, question mark, or exclamation point (not 'e')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:11 in public class `RecoveryNode`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:79 in public method `heartbeat_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:79 in public method `heartbeat_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:92 in public method `robot_state_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:92 in public method `robot_state_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:106 in public method `assignment_callback`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:106 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:131 in public method `monitor_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:131 in public method `monitor_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:161 in public method `send_heartbeat`: D400: First line should end with a period (not 'l')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:161 in public method `send_heartbeat`: D415: First line should end with a period, question mark, or exclamation point (not 'l')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:170 in public method `initiate_recovery`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:170 in public method `initiate_recovery`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:182 in public method `check_task_progress`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/recovery/recovery_node.py:182 in public method `check_task_progress`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/critical_path_analyzer.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D400: First line should end with a period (not ')')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/critical_path_analyzer.py:15 in public class `CriticalPathAnalyzer`: D415: First line should end with a period, question mark, or exclamation point (not ')')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/critical_path_analyzer.py:128 in public method `forward_pass`: D205: 1 blank line required between summary line and description (found 0)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/critical_path_analyzer.py:176 in public method `backward_pass`: D205: 1 blank line required between summary line and description (found 0)
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:13 in public class `TaskManagerNode`: D200: One-line docstring should fit on one line with quotes (found 3)
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:62 in public method `create_tasks`: D400: First line should end with a period (not 't')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:62 in public method `create_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 't')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:137 in public method `add_task_dependencies`: D400: First line should end with a period (not 'h')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:137 in public method `add_task_dependencies`: D415: First line should end with a period, question mark, or exclamation point (not 'h')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:186 in public method `update_available_tasks`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:186 in public method `update_available_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:205 in public method `publish_tasks`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:205 in public method `publish_tasks`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:212 in public method `assignment_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:212 in public method `assignment_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:226 in public method `get_available_tasks_callback`: D400: First line should end with a period (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:226 in public method `get_available_tasks_callback`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:232 in public method `task_update_callback`: D400: First line should end with a period (not 'n')
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/task_manager/task_manager_node.py:232 in public method `task_update_callback`: D415: First line should end with a period, question mark, or exclamation point (not 'n')
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/utils/__init__.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/utils/robot_utils.py
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/utils/task_dependency_analyzer.py
+./install/dec_control/lib/python3.10/site-packages/decentralized_control/utils/task_dependency_analyzer.py:12 in public class `TaskDependencyAnalyzer`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./install/dec_control/lib/python3.10/site-packages/decentralized_control/utils/task_utils.py
+checking ./install/dec_control/share/dec_control/launch/decentralized_controller.launch.py
+./install/dec_control/share/dec_control/launch/decentralized_controller.launch.py:11 in public function `generate_launch_description`: D202: No blank lines allowed after function docstring (found 1)
+./install/dec_control/share/dec_control/launch/decentralized_controller.launch.py:11 in public function `generate_launch_description`: D400: First line should end with a period (not 's')
+./install/dec_control/share/dec_control/launch/decentralized_controller.launch.py:11 in public function `generate_launch_description`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./install/dec_control/share/dec_control/launch/simulation.launch.py
+checking ./install/dec_control/share/dec_control/launch/unit_tests.launch.py
+checking ./launch/decentralized_controller.launch.py
+./launch/decentralized_controller.launch.py:11 in public function `generate_launch_description`: D202: No blank lines allowed after function docstring (found 1)
+./launch/decentralized_controller.launch.py:11 in public function `generate_launch_description`: D400: First line should end with a period (not 's')
+./launch/decentralized_controller.launch.py:11 in public function `generate_launch_description`: D415: First line should end with a period, question mark, or exclamation point (not 's')
+checking ./launch/simulation.launch.py
+checking ./launch/unit_tests.launch.py
+checking ./scripts/analyze_adaptation.py
+checking ./scripts/analyze_results.py
+checking ./scripts/assembly_task_visualiser.py
+./scripts/assembly_task_visualiser.py:15 in public class `AssemblyTaskVisualizer`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./scripts/experiment_runner.py
+./scripts/experiment_runner.py:17 in public class `ExperimentRunner`: D200: One-line docstring should fit on one line with quotes (found 3)
+checking ./scripts/gazebo_physics_configurator.py
+./scripts/gazebo_physics_configurator.py:12 in public class `GazeboPhysicsConfigurator`: D200: One-line docstring should fit on one line with quotes (found 3)
+./scripts/gazebo_physics_configurator.py:106 in public method `physics_callback`: D401: First line should be in imperative mood; try rephrasing (found 'Callback')
+checking ./scripts/plot_results.py
+checking ./scripts/robot_model_spawner.py
+./scripts/robot_model_spawner.py:12 in public class `RobotModelSpawner`: D200: One-line docstring should fit on one line with quotes (found 3)
+./scripts/robot_model_spawner.py:120 in public method `spawn_callback`: D401: First line should be in imperative mood; try rephrasing (found 'Callback')
+checking ./scripts/run_experiments.py
+checking ./setup.py
+checking ./test/__init__.py
+checking ./test/test_auction.py
+checking ./test/test_communication.py
+checking ./test/test_comparative.py
+checking ./test/test_consensus.py
+checking ./test/test_execution.py
+checking ./test/test_metrics.py
+checking ./test/test_recovery.py
+checking ./test/test_task_manager.py
+438 errors
+
+
+-- run_test.py: return code 1
+-- run_test.py: verify result file '/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/test_results/dec_control/pep257.xunit.xml'

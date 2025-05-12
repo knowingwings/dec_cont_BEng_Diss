@@ -1,0 +1,26 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from dec_control/msg/CapabilityUpdate.msg
+// generated code does not contain a copyright notice
+
+
+module dec_control {
+  module msg {
+    @verbatim (language="comment", text=
+      "msg/CapabilityUpdate.msg")
+    struct CapabilityUpdate {
+      int32 robot_id;
+
+      sequence<float> capabilities;
+
+      @verbatim (language="comment", text=
+        "1 for degraded capability, 0 otherwise")
+      sequence<float> degradation_mask;
+
+      boolean in_recovery;
+
+      @verbatim (language="comment", text=
+        "milliseconds since epoch")
+      int64 timestamp;
+    };
+  };
+};

@@ -1,0 +1,7 @@
+# Request
+Task task
+float32[] capabilities
+---
+# Response
+string auction_id
+bool success

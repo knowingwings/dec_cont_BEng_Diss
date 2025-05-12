@@ -1,0 +1,35 @@
+# simple_environment.yaml
+environment:
+  name: "Simple Environment"
+  description: "Open space with clearly defined workspaces"
+  dimensions: [4.0, 4.0, 2.0]
+  scale_factor: 1.0
+  
+  workspaces:
+    - name: "Robot 1 Workspace"
+      position: [1.0, 1.0, 0.0]
+      dimensions: [1.5, 1.5, 2.0]
+    
+    - name: "Robot 2 Workspace"
+      position: [3.0, 3.0, 0.0]
+      dimensions: [1.5, 1.5, 2.0]
+    
+    - name: "Shared Workspace"
+      position: [2.0, 2.0, 0.0]
+      dimensions: [1.0, 1.0, 2.0]
+  
+  stations:
+    - name: "Component Supply"
+      position: [0.5, 0.5, 0.5]
+      type: "supply"
+    
+    - name: "Assembly Area"
+      position: [2.0, 2.0, 0.5]
+      type: "assembly"
+    
+    - name: "Inspection Station"
+      position: [3.5, 3.5, 0.5]
+      type: "inspection"
+  
+  objects: []
+  obstacles: []

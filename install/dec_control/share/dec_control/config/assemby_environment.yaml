@@ -1,0 +1,77 @@
+# assembly_environment.yaml
+environment:
+  name: "Assembly Environment"
+  description: "Specialized stations for assembly tasks"
+  dimensions: [4.0, 4.0, 2.0]
+  scale_factor: 1.0
+  
+  workspaces:
+    - name: "Robot 1 Workspace"
+      position: [1.0, 1.0, 0.0]
+      dimensions: [2.0, 2.0, 2.0]
+    
+    - name: "Robot 2 Workspace"
+      position: [3.0, 3.0, 0.0]
+      dimensions: [2.0, 2.0, 2.0]
+    
+    - name: "Shared Workspace"
+      position: [2.0, 2.0, 0.0]
+      dimensions: [1.0, 1.0, 2.0]
+  
+  stations:
+    - name: "Component Storage"
+      position: [0.5, 0.5, 0.5]
+      type: "storage"
+      contents: ["fasteners", "brackets", "panels"]
+    
+    - name: "Fastener Station"
+      position: [1.0, 1.5, 0.5]
+      type: "assembly"
+      operations: ["insert_fastener", "tighten_bolt"]
+    
+    - name: "Panel Station"
+      position: [1.5, 0.8, 0.5]
+      type: "assembly"
+      operations: ["align_panel", "attach_panel"]
+    
+    - name: "Sealant Station"
+      position: [2.5, 1.5, 0.5]
+      type: "assembly"
+      operations: ["apply_sealant"]
+    
+    - name: "Main Assembly Station"
+      position: [2.0, 2.0, 0.5]
+      type: "assembly"
+      operations: ["align_component", "join_components"]
+    
+    - name: "Quality Control Station"
+      position: [3.0, 2.5, 0.5]
+      type: "inspection"
+      operations: ["measure_dimensions", "verify_connections"]
+    
+    - name: "Finished Products"
+      position: [3.5, 3.5, 0.5]
+      type: "storage"
+      contents: ["finished_assemblies"]
+  
+  objects:
+    - name: "Assembly Jig"
+      type: "box"
+      position: [2.0, 2.0, 0.4]
+      dimensions: [0.5, 0.5, 0.1]
+    
+    - name: "Tool Rack"
+      type: "box"
+      position: [1.0, 0.5, 0.5]
+      dimensions: [0.8, 0.2, 0.5]
+    
+    - name: "Conveyor Belt"
+      type: "box"
+      position: [3.0, 1.0, 0.3]
+      dimensions: [1.5, 0.4, 0.1]
+  
+  obstacles:
+    - name: "Safety Barrier"
+      type: "box"
+      position: [0.5, 2.5, 0.5]
+      dimensions: [0.1, 1.0, 1.0]

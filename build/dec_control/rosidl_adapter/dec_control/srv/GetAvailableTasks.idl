@@ -1,0 +1,20 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from dec_control/srv/GetAvailableTasks.srv
+// generated code does not contain a copyright notice
+
+#include "dec_control/msg/Task.idl"
+
+module dec_control {
+  module srv {
+    @verbatim (language="comment", text=
+      "Request")
+    struct GetAvailableTasks_Request {
+      string robot_id;
+    };
+    @verbatim (language="comment", text=
+      "Response")
+    struct GetAvailableTasks_Response {
+      sequence<dec_control::msg::Task> available_tasks;
+    };
+  };
+};

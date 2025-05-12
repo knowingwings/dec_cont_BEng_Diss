@@ -1,0 +1,21 @@
+{
+  "package_name": "dec_control",
+  "non_idl_tuples": [
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/Bid.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/CapabilityUpdate.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/CollaborationRequest.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/CollaborationResponse.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/Heartbeat.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/NetworkTopology.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/RecoveryStatus.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/RobotState.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/SynchronizationSignal.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/Task.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/TaskAssignment.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/TaskList.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:msg/TaskPriority.msg",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:srv/GetAvailableTasks.srv",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:srv/InitAuction.srv",
+    "/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss:srv/SubmitBid.srv"
+  ]
+}

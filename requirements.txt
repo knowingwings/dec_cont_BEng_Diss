@@ -29,7 +29,7 @@ docutils>=0.17.0
 # Development Tools
 colcon-common-extensions>=0.3.0
 setuptools>=71
-empy>=3.3.4
+empy>=4.2
 lark>=1.1.2
 
 # ROS2 Message Generation
