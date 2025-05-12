@@ -19,8 +19,8 @@ setup(
     maintainer='Tom Le Huray',
     maintainer_email='thomas.lehuray@outlook.com',
     description='Decentralized control for dual mobile manipulators',
-    license='TODO: License declaration',    test_suite='test',
-    test_requires=['pytest'],
+    license='TODO: License declaration',    tests_require=['pytest'],
+    python_requires='>=3.8',
     entry_points={
         'console_scripts': [
             'task_manager_node = decentralized_control.task_manager.task_manager_node:main',
