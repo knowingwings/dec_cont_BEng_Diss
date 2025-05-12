@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(decentralized_control)
+project(dec_control)
 
 # Find required packages
 find_package(ament_cmake REQUIRED)

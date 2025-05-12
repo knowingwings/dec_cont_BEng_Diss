@@ -2,7 +2,7 @@ from setuptools import setup
 from glob import glob
 import os
 
-package_name = 'decentralized_control'
+package_name = 'dec_control'
 
 setup(
     name=package_name,
