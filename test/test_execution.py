@@ -7,7 +7,7 @@ import time
 import numpy as np
 from threading import Thread
 
-from dec_control.execution.execution_controller import ExecutionController
+from decentralized_control.execution.execution_controller import ExecutionController
 from dec_control.msg import Task, TaskList, TaskAssignment, RobotState
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64MultiArray
