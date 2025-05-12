@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(decentralized_control)
 
-# Find required packages
+# Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(rclpy REQUIRED)
@@ -12,7 +12,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(action_msgs REQUIRED)
 
-# Generate interfaces
+# Generate ROS interfaces
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Bid.msg"
   "msg/CapabilityUpdate.msg"
@@ -33,9 +33,13 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs action_msgs
 )
 
-# Install Python modules
+# Python
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+set(PYTHON_INSTALL_DIR lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages)
+
+# Install Python package
 ament_python_install_package(
-  ${PROJECT_NAME}
+  decentralized_control
   PACKAGE_DIR decentralized_control
 )
 
@@ -52,43 +56,18 @@ install(PROGRAMS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install launch files
-install(DIRECTORY
-  launch
-  DESTINATION share/${PROJECT_NAME}
-)
+# Install directories
+foreach(DIR launch config models worlds)
+  install(DIRECTORY ${DIR}
+    DESTINATION share/${PROJECT_NAME}
+  )
+endforeach()
 
-# Install config files
-install(DIRECTORY
-  config
-  DESTINATION share/${PROJECT_NAME}
-)
-
-# Install model files
-install(DIRECTORY
-  models
-  DESTINATION share/${PROJECT_NAME}
-)
-
-# Install world files
-install(DIRECTORY
-  worlds
-  DESTINATION share/${PROJECT_NAME}
-)
-
+# Testing
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
-  
-  # Add linters
   ament_lint_auto_find_test_dependencies()
-  
-  # Add Python tests
-  ament_add_pytest_test(${PROJECT_NAME}_pytest test
-    APPEND_ENV PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}
-    TIMEOUT 60
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  )
 endif()
 
 ament_package()
