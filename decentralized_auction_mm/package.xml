@@ -20,6 +20,8 @@
   <depend>sensor_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>visualization_msgs</depend>
+  
+  <!-- TF2 dependencies - CRITICAL -->
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
   <depend>tf2_geometry_msgs</depend>
@@ -41,9 +43,15 @@
   <!-- Other dependencies -->
   <depend>eigen</depend>
   
+  <!-- Message generation -->
   <build_depend>rosidl_default_generators</build_depend>
   <exec_depend>rosidl_default_runtime</exec_depend>
   <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <!-- Python dependencies for scripts -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

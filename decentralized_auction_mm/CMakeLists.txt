@@ -42,7 +42,7 @@ else()
   add_definitions(-DNO_OPEN_MANIPULATOR)
 endif()
 
-# Generate custom messages
+# Generate custom messages - FIRST STEP TO ENSURE AVAILABILITY
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Task.msg"
   "msg/TaskArray.msg"
@@ -56,11 +56,19 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES std_msgs geometry_msgs
 )
 
+# Get the message includes directory for generated headers
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+
+# Setup Gazebo environment
+find_package(gazebo REQUIRED)
+
 # Include directories
 include_directories(
   include
   ${EIGEN3_INCLUDE_DIRS}
+  ${GAZEBO_INCLUDE_DIRS}
 )
+link_directories(${GAZEBO_LIBRARY_DIRS})
 
 # Add library for auction algorithm components
 add_library(auction_components
@@ -81,7 +89,7 @@ add_library(robot_components
 add_library(task_components
   src/task/task_manager.cpp
   src/task/dependency_manager.cpp
-  # Add task_representation.cpp if you have this file
+  src/task/task_representation.cpp
 )
 
 # Add library for utility components
@@ -90,6 +98,19 @@ add_library(util_components
   src/util/math_utils.cpp
   src/util/visualization.cpp
 )
+
+# CRITICAL: Add dependency to message generation for each component
+target_link_libraries(auction_components "${cpp_typesupport_target}")
+target_link_libraries(robot_components "${cpp_typesupport_target}")
+target_link_libraries(task_components "${cpp_typesupport_target}")
+target_link_libraries(util_components "${cpp_typesupport_target}")
+
+# Make sure the generated message headers are included for each component
+foreach(target auction_components robot_components task_components util_components)
+  target_include_directories(${target} PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>"
+  )
+endforeach()
 
 # Link dependencies
 ament_target_dependencies(auction_components
@@ -113,18 +134,39 @@ ament_target_dependencies(task_components
 )
 
 ament_target_dependencies(util_components
-  rclcpp std_msgs geometry_msgs visualization_msgs
+  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_geometry_msgs
 )
 
 # Add executables for ROS nodes
 add_executable(auction_node src/nodes/auction_node.cpp)
-target_link_libraries(auction_node auction_components util_components)
+target_link_libraries(auction_node 
+  auction_components 
+  util_components
+  "${cpp_typesupport_target}"
+)
 
 add_executable(robot_node src/nodes/robot_node.cpp)
-target_link_libraries(robot_node robot_components auction_components task_components util_components)
+target_link_libraries(robot_node 
+  robot_components 
+  auction_components 
+  task_components 
+  util_components
+  "${cpp_typesupport_target}"
+)
 
 add_executable(task_generator_node src/nodes/task_generator_node.cpp)
-target_link_libraries(task_generator_node task_components util_components)
+target_link_libraries(task_generator_node 
+  task_components 
+  util_components
+  "${cpp_typesupport_target}"
+)
+
+# Include directories for executables to find message headers
+foreach(target auction_node robot_node task_generator_node)
+  target_include_directories(${target} PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>"
+  )
+endforeach()
 
 # Link dependencies to executables
 ament_target_dependencies(auction_node
@@ -181,16 +223,5 @@ install(PROGRAMS
   scripts/generate_tasks.py
   DESTINATION lib/${PROJECT_NAME}
 )
-
-# Setup Gazebo environment
-find_package(gazebo REQUIRED)
-include_directories(${GAZEBO_INCLUDE_DIRS})
-link_directories(${GAZEBO_LIBRARY_DIRS})
-
-# Add custom messages
-rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
-target_link_libraries(auction_node "${cpp_typesupport_target}")
-target_link_libraries(robot_node "${cpp_typesupport_target}")
-target_link_libraries(task_generator_node "${cpp_typesupport_target}")
 
 ament_package()
