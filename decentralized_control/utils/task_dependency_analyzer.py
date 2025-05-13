@@ -6,7 +6,7 @@ from rclpy.node import Node
 import numpy as np
 from collections import defaultdict, deque
 
-from decentralized_control.msg import Task, TaskList, TaskPriority
+from dec_control.msg import Task, TaskList, TaskPriority
 
 class TaskDependencyAnalyzer(Node):
     """
