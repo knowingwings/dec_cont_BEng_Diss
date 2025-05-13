@@ -36,7 +36,6 @@
   <depend>turtlebot3_simulations</depend>
   
   <!-- OpenMANIPULATOR dependencies -->
-  <depend>open_manipulator_msgs</depend>
   <depend>open_manipulator_x_description</depend>
   <depend>open_manipulator_x_libs</depend>
   

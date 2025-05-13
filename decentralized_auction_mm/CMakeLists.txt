@@ -28,10 +28,9 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(Eigen3 REQUIRED)
 
 # Check for OpenMANIPULATOR dependencies
-set(HAVE_OPEN_MANIPULATOR TRUE)
-find_package(open_manipulator_msgs REQUIRED)
-find_package(open_manipulator_x_libs QUIET)
-find_package(open_manipulator_x_description QUIET)
+set(HAVE_OPEN_MANIPULATOR FALSE)
+message(STATUS "Building without OpenMANIPULATOR support")
+add_definitions(-DNO_OPEN_MANIPULATOR)
 
 if(open_manipulator_msgs_FOUND AND open_manipulator_x_libs_FOUND)
   message(STATUS "OpenMANIPULATOR packages found, building with manipulator support")
