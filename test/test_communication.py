@@ -7,7 +7,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from threading import Thread
 
-from dec_control.communication_middleware import CommunicationMiddleware
+from decentralized_control.communication_middleware import CommunicationMiddleware
 
 class TestPublisher(Node):
     """Test publisher node for communication tests."""
