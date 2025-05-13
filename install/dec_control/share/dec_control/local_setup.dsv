@@ -1,4 +1,0 @@
-source;share/dec_control/environment/ament_prefix_path.sh
-source;share/dec_control/environment/library_path.sh
-source;share/dec_control/environment/path.sh
-source;share/dec_control/environment/pythonpath.sh

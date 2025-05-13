@@ -1,6 +1,0 @@
-setup.py
-dec_control/__init__.py
-dec_control.egg-info/PKG-INFO
-dec_control.egg-info/SOURCES.txt
-dec_control.egg-info/dependency_links.txt
-dec_control.egg-info/top_level.txt

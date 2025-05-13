@@ -1,8 +1,0 @@
--- run_test.py: invoking following command in '/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss':
- - /opt/ros/humble/bin/ament_cppcheck --xunit-file /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/test_results/dec_control/cppcheck.xunit.xml --include_dirs /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_generator_c /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_typesupport_fastrtps_c /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_typesupport_introspection_c /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_generator_cpp /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_typesupport_fastrtps_cpp /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_typesupport_introspection_cpp /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_generator_c /home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/rosidl_generator_py
-
-cppcheck 2.7 has known performance issues and therefore will not be used, set the AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS environment variable to override this.
-
-
--- run_test.py: return code 0
--- run_test.py: verify result file '/home/engineer/dec_attempt_v2/dec_cont_BEng_Diss/build/dec_control/test_results/dec_control/cppcheck.xunit.xml'
