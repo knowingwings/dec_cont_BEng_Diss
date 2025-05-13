@@ -46,7 +46,7 @@ visualization_msgs::msg::MarkerArray Visualization::createTaskMarkers(
         marker.action = visualization_msgs::msg::Marker::ADD;
         marker.pose = task.position;
         marker.scale = task.dimensions;
-        marker.color = getTaskColor(task).to_msg();
+        marker.color = getTaskColor(task);
         
         markers.markers.push_back(marker);
         
@@ -97,7 +97,7 @@ visualization_msgs::msg::MarkerArray Visualization::createRobotMarkers(
         marker.scale.y = 0.3;  // Diameter
         marker.scale.z = 0.2;  // Height
         
-        marker.color = getRobotColor(robot_id, status.failed).to_msg();
+        marker.color = getRobotColor(robot_id, status.failed);
         
         markers.markers.push_back(marker);
         
@@ -215,7 +215,7 @@ visualization_msgs::msg::MarkerArray Visualization::createAssignmentMarkers(
             marker.scale.z = 0.03;  // Head length
             
             // Set color based on robot ID
-            marker.color = getRobotColor(task.assigned_robot, false).to_msg();
+            marker.color = getRobotColor(task.assigned_robot, false);
             
             markers.markers.push_back(marker);
         }

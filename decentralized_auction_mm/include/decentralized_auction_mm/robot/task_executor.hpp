@@ -8,10 +8,12 @@
 #include <geometry_msgs/msg/pose.hpp>
 
 #include "decentralized_auction_mm/msg/task.hpp"
-#include "decentralized_auction_mm/robot/mobile_manipulator.hpp"
 
 namespace decentralized_auction_mm {
 namespace robot {
+
+// Forward declaration
+class MobileManipulator;
 
 /**
  * @class TaskExecutor

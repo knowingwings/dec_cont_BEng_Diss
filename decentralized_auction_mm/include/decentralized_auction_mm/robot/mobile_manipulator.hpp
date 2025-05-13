@@ -1,116 +1,164 @@
-#ifndef DECENTRALIZED_AUCTION_MM_TASK_EXECUTOR_HPP
-#define DECENTRALIZED_AUCTION_MM_TASK_EXECUTOR_HPP
+#ifndef DECENTRALIZED_AUCTION_MM_MOBILE_MANIPULATOR_HPP
+#define DECENTRALIZED_AUCTION_MM_MOBILE_MANIPULATOR_HPP
 
 #include <memory>
 #include <mutex>
 #include <map>
+#include <vector>
+#include <string>
+#include <random>
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/pose.hpp>
-
-#include "decentralized_auction_mm/msg/task.hpp"
-#include "decentralized_auction_mm/robot/mobile_manipulator.hpp"
+#include <geometry_msgs/msg/twist.hpp>
+#include <nav_msgs/msg/odometry.hpp>
+#include <sensor_msgs/msg/joint_state.hpp>
+#include <tf2_ros/transform_listener.hpp>
+#include <tf2_ros/buffer.hpp>
+#include <open_manipulator_msgs/msg/open_manipulator_state.hpp>
+#include <open_manipulator_msgs/srv/set_joint_position.hpp>
+#include <open_manipulator_msgs/srv/set_kinematics_pose.hpp>
 
 namespace decentralized_auction_mm {
 namespace robot {
 
 /**
- * @class TaskExecutor
- * @brief Executes assembly tasks using a mobile manipulator
+ * @class MobileManipulator
+ * @brief Controls a mobile manipulator (TurtleBot3 + OpenMANIPULATOR-X)
  * 
- * This class implements the logic for executing assembly tasks,
- * coordinating the mobile base and manipulator movements.
+ * This class provides interfaces to control both the mobile base and
+ * the manipulator arm, handling kinematics and motion.
  */
-class TaskExecutor {
+class MobileManipulator {
 public:
     /**
      * @brief Constructor
      * @param robot_id The ID of the robot
      * @param node The ROS node handle
-     * @param mobile_manipulator Pointer to the mobile manipulator controller
-     * @param params The executor parameters
+     * @param params The controller parameters
      */
-    TaskExecutor(
+    MobileManipulator(
         uint32_t robot_id,
         rclcpp::Node* node,
-        MobileManipulator* mobile_manipulator,
         const std::map<std::string, double>& params
     );
 
     /**
-     * @brief Start executing a task
-     * @param task The task to execute
-     * @return True if the task was successfully started
+     * @brief Initialize the mobile manipulator
+     * @return True if successful
      */
-    bool startTask(const msg::Task& task);
+    bool initialize();
 
     /**
-     * @brief Update the task execution
-     * @return Progress of the task (0.0 to 1.0), or -1.0 if completed
+     * @brief Move the base to a target pose
+     * @param target_pose The target pose
+     * @return True if movement started successfully
      */
-    double update();
+    bool moveBase(const geometry_msgs::msg::Pose& target_pose);
 
     /**
-     * @brief Check if a task is currently being executed
-     * @return True if a task is being executed
+     * @brief Stop the base movement
+     * @return True if successful
      */
-    bool isExecuting() const;
+    bool stopBase();
 
     /**
-     * @brief Get the current task
-     * @return The current task, or empty task if none
+     * @brief Set joint positions for the manipulator
+     * @param joint_positions Vector of joint positions
+     * @return True if command sent successfully
      */
-    msg::Task getCurrentTask() const;
+    bool setJointPositions(const std::vector<double>& joint_positions);
 
     /**
-     * @brief Cancel the current task
-     * @return True if a task was cancelled
+     * @brief Set end effector pose
+     * @param pose The target pose
+     * @return True if command sent successfully
      */
-    bool cancelTask();
+    bool setEndEffectorPose(const geometry_msgs::msg::Pose& pose);
 
     /**
-     * @brief Check if this executor can handle a task
-     * @param task The task to check
-     * @return True if the task can be executed
+     * @brief Execute a trajectory
+     * @param waypoints Vector of pose waypoints
+     * @return True if execution started successfully
      */
-    bool canExecuteTask(const msg::Task& task) const;
+    bool executeTrajectory(const std::vector<geometry_msgs::msg::Pose>& waypoints);
+
+    /**
+     * @brief Control the gripper
+     * @param open True to open, false to close
+     * @return True if command sent successfully
+     */
+    bool controlGripper(bool open);
+
+    /**
+     * @brief Get current base pose
+     * @return Current base pose
+     */
+    geometry_msgs::msg::Pose getBasePose() const;
+
+    /**
+     * @brief Get current joint positions
+     * @return Vector of joint positions
+     */
+    std::vector<double> getJointPositions() const;
+
+    /**
+     * @brief Get current end effector pose
+     * @return End effector pose
+     */
+    geometry_msgs::msg::Pose getEndEffectorPose() const;
+
+    /**
+     * @brief Check if manipulator is moving
+     * @return True if moving
+     */
+    bool isManipulatorMoving() const;
+
+    /**
+     * @brief Check if base is moving
+     * @return True if moving
+     */
+    bool isBaseMoving() const;
+
+    /**
+     * @brief Update the mobile manipulator
+     * This method should be called periodically
+     */
+    void update();
 
 private:
     /**
-     * @brief Plan execution sequence for a task
-     * @param task The task to plan for
-     * @return True if planning was successful
+     * @brief Callback for odometry messages
+     * @param msg The odometry message
      */
-    bool planTaskExecution(const msg::Task& task);
+    void odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg);
 
     /**
-     * @brief Move base to task position
-     * @return True if the movement was completed
+     * @brief Callback for joint state messages
+     * @param msg The joint state message
      */
-    bool moveBaseToTask();
+    void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr msg);
 
     /**
-     * @brief Configure manipulator for task
-     * @return True if the configuration was completed
+     * @brief Callback for manipulator state messages
+     * @param msg The manipulator state message
      */
-    bool configureManipulator();
+    void manipulatorStateCallback(
+        const open_manipulator_msgs::msg::OpenManipulatorState::SharedPtr msg);
 
     /**
-     * @brief Execute manipulation sequence
-     * @return True if the manipulation was completed
+     * @brief Calculate velocity command for base movement
+     * @param target_pose The target pose
+     * @return Velocity command
      */
-    bool executeManipulation();
-
+    geometry_msgs::msg::Twist calculateVelocityCommand(
+        const geometry_msgs::msg::Pose& target_pose);
+    
     /**
-     * @brief Finish task execution
-     * @return True if the task was successfully finished
+     * @brief Convert quaternion to Euler angles
+     * @param quat Quaternion
+     * @return Vector of [roll, pitch, yaw]
      */
-    bool finishTask();
-
-    /**
-     * @brief Handle collaborative synchronization
-     * @return True if synchronized successfully
-     */
-    bool handleSynchronization();
+    std::vector<double> quaternionToEuler(const geometry_msgs::msg::Quaternion& quat) const;
 
     // Robot ID
     uint32_t robot_id_;
@@ -118,38 +166,56 @@ private:
     // ROS node handle
     rclcpp::Node* node_;
 
-    // Mobile manipulator controller
-    MobileManipulator* mobile_manipulator_;
-
-    // Executor parameters
+    // Controller parameters
     std::map<std::string, double> params_;
 
-    // Task execution state
-    enum class ExecutionState {
-        IDLE,
-        MOVING_TO_TASK,
-        CONFIGURING_MANIPULATOR,
-        WAITING_FOR_SYNC,
-        EXECUTING_MANIPULATION,
-        FINISHING
-    };
+    // State variables
+    bool initialized_;
+    bool manipulator_moving_;
+    bool base_moving_;
+    bool has_base_target_;
+    bool has_joint_target_;
+    bool has_ee_target_;
+    std::string manipulator_state_;
 
-    ExecutionState state_;
-    msg::Task current_task_;
-    double progress_;
-    rclcpp::Time task_start_time_;
-    bool task_completed_;
+    // Current state
+    geometry_msgs::msg::Pose current_base_pose_;
+    geometry_msgs::msg::Twist current_velocity_;
+    sensor_msgs::msg::JointState current_joint_state_;
 
-    // Execution plan
+    // Target states
     geometry_msgs::msg::Pose target_base_pose_;
     std::vector<double> target_joint_positions_;
-    std::vector<geometry_msgs::msg::Pose> manipulation_waypoints_;
-    uint32_t current_waypoint_;
+    geometry_msgs::msg::Pose target_ee_pose_;
 
-    // Synchronization for collaborative tasks
-    bool is_leader_;
-    bool sync_received_;
-    rclcpp::Time sync_request_time_;
+    // PID control variables
+    double linear_kp_;
+    double linear_ki_;
+    double linear_kd_;
+    double angular_kp_;
+    double angular_ki_;
+    double angular_kd_;
+    double linear_error_sum_;
+    double angular_error_sum_;
+    double prev_linear_error_;
+    double prev_angular_error_;
+    rclcpp::Time last_error_time_;
+
+    // ROS subscribers
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_;
+    rclcpp::Subscription<open_manipulator_msgs::msg::OpenManipulatorState>::SharedPtr manipulator_state_sub_;
+
+    // ROS publishers
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
+
+    // ROS service clients
+    rclcpp::Client<open_manipulator_msgs::srv::SetJointPosition>::SharedPtr set_joint_position_client_;
+    rclcpp::Client<open_manipulator_msgs::srv::SetKinematicsPose>::SharedPtr set_kinematics_pose_client_;
+
+    // TF2 buffer and listener
+    std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+    std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
 
     // Thread safety
     mutable std::mutex mutex_;
@@ -161,4 +227,4 @@ private:
 } // namespace robot
 } // namespace decentralized_auction_mm
 
-#endif // DECENTRALIZED_AUCTION_MM_TASK_EXECUTOR_HPP
+#endif // DECENTRALIZED_AUCTION_MM_MOBILE_MANIPULATOR_HPP

@@ -63,7 +63,7 @@ bool AuctionAlgorithm::processAuctionStep(const std::vector<uint32_t>& available
     
     // Track unassigned iterations counter for all tasks
     for (const auto& task : tasks_) {
-        if (task_assignments_[task.id] == 0) {
+        if (task_assignments_.at(task.id) == 0) {
             unassigned_iterations_[task.id]++;
         } else {
             unassigned_iterations_[task.id] = 0;
@@ -74,8 +74,8 @@ bool AuctionAlgorithm::processAuctionStep(const std::vector<uint32_t>& available
     // that are already assigned to this robot (can be reassigned for better balance)
     std::vector<uint32_t> valid_tasks;
     for (uint32_t task_id : available_tasks) {
-        if (task_assignments_[task_id] == 0 || 
-            task_assignments_[task_id] == robot_id_) {
+        if (task_assignments_.at(task_id) == 0 || 
+            task_assignments_.at(task_id) == robot_id_) {
             valid_tasks.push_back(task_id);
         }
     }
@@ -94,8 +94,8 @@ bool AuctionAlgorithm::processAuctionStep(const std::vector<uint32_t>& available
     // Adjust prices for unassigned tasks
     if (iteration_ > 10) {
         for (const auto& task : tasks_) {
-            if (task_assignments_[task.id] == 0) {
-                uint32_t unassigned_iter = unassigned_iterations_[task.id];
+            if (task_assignments_.at(task.id) == 0) {
+                uint32_t unassigned_iter = unassigned_iterations_.at(task.id);
                 
                 // Progressive price reduction for longer unassigned tasks
                 double reduction_factor = 0.9; // Default mild reduction
@@ -136,7 +136,7 @@ std::vector<msg::Bid> AuctionAlgorithm::calculateBids(const std::vector<uint32_t
     // Calculate total workload for each robot (including our robot)
     std::map<uint32_t, double> robot_workloads;
     for (const auto& [robot_id, status] : robot_status_) {
-        if (!robot_failed_[robot_id]) {
+        if (!robot_failed_.at(robot_id)) {
             robot_workloads[robot_id] = status.current_workload;
         }
     }
@@ -150,7 +150,7 @@ std::vector<msg::Bid> AuctionAlgorithm::calculateBids(const std::vector<uint32_t
     double min_workload = std::numeric_limits<double>::max();
     double max_workload = 0.0;
     for (const auto& [robot_id, workload] : robot_workloads) {
-        if (!robot_failed_[robot_id]) {
+        if (!robot_failed_.at(robot_id)) {
             min_workload = std::min(min_workload, workload);
             max_workload = std::max(max_workload, workload);
         }
@@ -163,11 +163,11 @@ std::vector<msg::Bid> AuctionAlgorithm::calculateBids(const std::vector<uint32_t
     // Calculate workload ratio for this robot
     double workload_ratio = 1.0;
     if (max_workload > 0) {
-        workload_ratio = robot_workloads[robot_id_] / max_workload;
+        workload_ratio = robot_workloads.at(robot_id_) / max_workload;
     }
     
     // Calculate adaptive epsilon based on iteration
-    double base_epsilon = params_["epsilon"];
+    double base_epsilon = params_.at("epsilon");
     if (iteration_ < 10) {
         base_epsilon *= 1.5; // Higher initial epsilon to prevent oscillations
     }
@@ -188,25 +188,25 @@ std::vector<msg::Bid> AuctionAlgorithm::calculateBids(const std::vector<uint32_t
         // Calculate bid using bid calculator
         double bid_value = bid_calculator_->calculateBid(
             task, 
-            robot_workloads[robot_id_],
+            robot_workloads.at(robot_id_),
             workload_ratio,
             workload_imbalance,
             iteration_,
-            unassigned_iterations_[task_id],
+            unassigned_iterations_.at(task_id),
             in_recovery_mode_
         );
         
         // Calculate utility (bid minus price)
-        double utility = bid_value - task_prices_[task_id];
+        double utility = bid_value - task_prices_.at(task_id);
         
         // Apply a penalty to the utility if this task has recently oscillated between robots
-        if (task_oscillation_count_[task_id] > 3 && task_last_robot_[task_id] != robot_id_) {
+        if (task_oscillation_count_.at(task_id) > 3 && task_last_robot_.at(task_id) != robot_id_) {
             utility *= 0.9;
         }
         
         // Special handling for long-unassigned tasks with escalating incentives
-        if (task_assignments_[task_id] == 0) {
-            uint32_t unassigned_iter = unassigned_iterations_[task_id];
+        if (task_assignments_.at(task_id) == 0) {
+            uint32_t unassigned_iter = unassigned_iterations_.at(task_id);
             if (unassigned_iter > 20) {
                 double bonus_factor = std::min(3.0, 1.0 + (unassigned_iter - 20) * 0.1);
                 utility *= bonus_factor;
@@ -249,7 +249,7 @@ bool AuctionAlgorithm::updateAssignments(const std::vector<msg::Bid>& bids) {
     double workload_ratio = 1.0;
     double max_workload = 0.0;
     for (const auto& [robot_id, status] : robot_status_) {
-        if (!robot_failed_[robot_id]) {
+        if (!robot_failed_.at(robot_id)) {
             max_workload = std::max(max_workload, status.current_workload);
         }
     }
@@ -293,8 +293,8 @@ bool AuctionAlgorithm::updateAssignments(const std::vector<msg::Bid>& bids) {
         }
         
         // Check if this is a new assignment or improvement
-        if (task_assignments_[bid.task_id] != robot_id_) {
-            uint32_t old_assignment = task_assignments_[bid.task_id];
+        if (task_assignments_.at(bid.task_id) != robot_id_) {
+            uint32_t old_assignment = task_assignments_.at(bid.task_id);
             
             // Track oscillation (robot changes) for this task
             if (old_assignment > 0 && old_assignment != robot_id_) {
@@ -306,17 +306,17 @@ bool AuctionAlgorithm::updateAssignments(const std::vector<msg::Bid>& bids) {
             task_assignments_[bid.task_id] = robot_id_;
             
             // If this is the first assignment, record it for recovery analysis
-            if (initial_assignments_[bid.task_id] == 0) {
+            if (initial_assignments_.at(bid.task_id) == 0) {
                 initial_assignments_[bid.task_id] = robot_id_;
             }
             
             // Dynamic price increment with multiple factors
             double effective_epsilon = iteration_ < 10 ? 
-                params_["epsilon"] * 1.5 : params_["epsilon"];
+                params_.at("epsilon") * 1.5 : params_.at("epsilon");
             
             // Factor 1: Task oscillation history
-            if (task_oscillation_count_[bid.task_id] > 2) {
-                effective_epsilon *= (1.0 + 0.15 * task_oscillation_count_[bid.task_id]);
+            if (task_oscillation_count_.at(bid.task_id) > 2) {
+                effective_epsilon *= (1.0 + 0.15 * task_oscillation_count_.at(bid.task_id));
             }
             
             // Factor 2: Workload balancing
@@ -327,9 +327,15 @@ bool AuctionAlgorithm::updateAssignments(const std::vector<msg::Bid>& bids) {
             }
             
             // Cap prices to prevent them from getting too high
-            double max_price = 3.0 * *std::max_element(params_["alpha"].begin(), params_["alpha"].end());
-            if (task_prices_[bid.task_id] + effective_epsilon > max_price) {
-                effective_epsilon = std::max(0.0, max_price - task_prices_[bid.task_id]);
+            double alpha_max = 0.0;
+            for (const auto& [key, value] : params_) {
+                if (key.substr(0, 5) == "alpha") {
+                    alpha_max = std::max(alpha_max, value);
+                }
+            }
+            double max_price = 3.0 * alpha_max;
+            if (task_prices_.at(bid.task_id) + effective_epsilon > max_price) {
+                effective_epsilon = std::max(0.0, max_price - task_prices_.at(bid.task_id));
             }
             
             // Update task price
@@ -339,7 +345,7 @@ bool AuctionAlgorithm::updateAssignments(const std::vector<msg::Bid>& bids) {
             bid_count++;
             
             RCLCPP_DEBUG(logger_, "Robot %d assigned task %d (bid: %.2f, price: %.2f)",
-                robot_id_, bid.task_id, bid.bid_value, task_prices_[bid.task_id]);
+                robot_id_, bid.task_id, bid.bid_value, task_prices_.at(bid.task_id));
         }
     }
     
@@ -362,7 +368,7 @@ void AuctionAlgorithm::processBid(const msg::Bid& bid) {
     std::lock_guard<std::mutex> lock(mutex_);
     
     // Ignore bids from failed robots
-    if (robot_failed_[bid.robot_id]) {
+    if (robot_failed_.find(bid.robot_id) != robot_failed_.end() && robot_failed_.at(bid.robot_id)) {
         return;
     }
     
@@ -370,12 +376,13 @@ void AuctionAlgorithm::processBid(const msg::Bid& bid) {
     // This would require adding an iteration field to the Bid message
     
     // Check if the bid is higher than the current price
-    if (bid.bid_value > task_prices_[bid.task_id]) {
-        uint32_t old_assignment = task_assignments_[bid.task_id];
+    if (task_prices_.find(bid.task_id) != task_prices_.end() && 
+        bid.bid_value > task_prices_.at(bid.task_id)) {
+        uint32_t old_assignment = task_assignments_.at(bid.task_id);
         
         // Update task assignment and price
         task_assignments_[bid.task_id] = bid.robot_id;
-        updateTaskPrice(bid.task_id, bid.bid_value + params_["epsilon"]);
+        updateTaskPrice(bid.task_id, bid.bid_value + params_.at("epsilon"));
         
         // Update task in tasks_ vector
         for (auto& task : tasks_) {
@@ -392,12 +399,12 @@ void AuctionAlgorithm::processBid(const msg::Bid& bid) {
         task_last_robot_[bid.task_id] = bid.robot_id;
         
         // If this is the first assignment, record it for recovery analysis
-        if (initial_assignments_[bid.task_id] == 0) {
+        if (initial_assignments_.at(bid.task_id) == 0) {
             initial_assignments_[bid.task_id] = bid.robot_id;
         }
         
         RCLCPP_DEBUG(logger_, "Processed bid from robot %d for task %d (bid: %.2f, price: %.2f)",
-            bid.robot_id, bid.task_id, bid.bid_value, task_prices_[bid.task_id]);
+            bid.robot_id, bid.task_id, bid.bid_value, task_prices_.at(bid.task_id));
     }
 }
 
@@ -462,7 +469,7 @@ void AuctionAlgorithm::initiateRecovery(uint32_t failed_robot_id) {
     // Sort failed tasks by criticality (highest first)
     std::sort(failed_tasks.begin(), failed_tasks.end(),
         [&criticality_scores](uint32_t a, uint32_t b) {
-            return criticality_scores[a] > criticality_scores[b];
+            return criticality_scores.at(a) > criticality_scores.at(b);
         });
     
     // Process in order of criticality
@@ -484,7 +491,7 @@ void AuctionAlgorithm::initiateRecovery(uint32_t failed_robot_id) {
         for (auto& task : tasks_) {
             if (task.id == task_id) {
                 task.assigned_robot = 0;
-                task.current_price = task_prices_[task_id];
+                task.current_price = task_prices_.at(task_id);
                 break;
             }
         }
@@ -502,7 +509,7 @@ bool AuctionAlgorithm::processRecoveryStep(const std::vector<uint32_t>& availabl
     bool all_reassigned = true;
     for (const auto& [task_id, robot_id] : task_assignments_) {
         // Check if task was assigned to the failed robot at time of failure
-        if (initial_assignments_[task_id] == failed_robot_id_) {
+        if (initial_assignments_.at(task_id) == failed_robot_id_) {
             // If still unassigned or assigned to failed robot, not all reassigned
             if (robot_id == 0 || robot_id == failed_robot_id_) {
                 all_reassigned = false;
@@ -523,8 +530,8 @@ bool AuctionAlgorithm::processRecoveryStep(const std::vector<uint32_t>& availabl
     for (uint32_t task_id : available_tasks) {
         // Only consider tasks that were assigned to the failed robot
         // or unassigned tasks that are available
-        if (initial_assignments_[task_id] == failed_robot_id_ || 
-            task_assignments_[task_id] == 0) {
+        if (initial_assignments_.at(task_id) == failed_robot_id_ || 
+            task_assignments_.at(task_id) == 0) {
             recovery_tasks.push_back(task_id);
         }
     }
@@ -541,8 +548,8 @@ bool AuctionAlgorithm::processRecoveryStep(const std::vector<uint32_t>& availabl
     
     // More aggressive price reduction during recovery for unassigned tasks
     for (uint32_t task_id : recovery_tasks) {
-        if (task_assignments_[task_id] == 0) {
-            uint32_t unassigned_iter = unassigned_iterations_[task_id];
+        if (task_assignments_.at(task_id) == 0) {
+            uint32_t unassigned_iter = unassigned_iterations_.at(task_id);
             
             // Even more aggressive reduction during recovery
             double reduction_factor = 0.9; // Default
@@ -650,7 +657,7 @@ msg::AuctionStatus AuctionAlgorithm::getAuctionStatus() const {
     // Calculate global makespan
     std::map<uint32_t, double> robot_makespans;
     for (const auto& [robot_id, robot_status] : robot_status_) {
-        if (!robot_failed_[robot_id]) {
+        if (!robot_failed_.at(robot_id)) {
             robot_makespans[robot_id] = 0.0;
         }
     }
@@ -662,9 +669,12 @@ msg::AuctionStatus AuctionAlgorithm::getAuctionStatus() const {
     
     // Calculate makespan for each robot
     for (const auto& task : tasks_) {
-        uint32_t robot_id = task_assignments_[task.id];
-        if (robot_id > 0 && !robot_failed_[robot_id]) {
-            robot_makespans[robot_id] += task.execution_time;
+        if (task_assignments_.find(task.id) != task_assignments_.end()) {
+            uint32_t robot_id = task_assignments_.at(task.id);
+            if (robot_id > 0 && robot_makespans.find(robot_id) != robot_makespans.end() &&
+                !robot_failed_.at(robot_id)) {
+                robot_makespans[robot_id] += task.execution_time;
+            }
         }
     }
     

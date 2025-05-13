@@ -29,7 +29,7 @@ find_package(Eigen3 REQUIRED)
 
 # Check for OpenMANIPULATOR dependencies
 set(HAVE_OPEN_MANIPULATOR TRUE)
-find_package(open_manipulator_msgs QUIET)
+find_package(open_manipulator_msgs REQUIRED)
 find_package(open_manipulator_x_libs QUIET)
 find_package(open_manipulator_x_description QUIET)
 
@@ -114,13 +114,13 @@ endforeach()
 
 # Link dependencies
 ament_target_dependencies(auction_components
-  rclcpp std_msgs geometry_msgs visualization_msgs
+  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros
 )
 
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_components
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator_msgs open_manipulator_x_libs
+    turtlebot3_msgs open_manipulator_msgs
   )
 else()
   ament_target_dependencies(robot_components
@@ -170,13 +170,13 @@ endforeach()
 
 # Link dependencies to executables
 ament_target_dependencies(auction_node
-  rclcpp std_msgs geometry_msgs visualization_msgs
+  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros
 )
 
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_node
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator_msgs open_manipulator_x_libs
+    turtlebot3_msgs open_manipulator_msgs
   )
 else()
   ament_target_dependencies(robot_node

@@ -20,6 +20,7 @@ MobileManipulator::MobileManipulator(
       has_base_target_(false),
       has_joint_target_(false),
       has_ee_target_(false),
+      manipulator_state_("STOPPED"),
       logger_(node->get_logger())
 {
     // Get control parameters
