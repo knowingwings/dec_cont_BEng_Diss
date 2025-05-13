@@ -77,55 +77,52 @@ class RecoveryNode(Node):
     
     def heartbeat_callback(self, msg):
         """Process heartbeat signals"""
-        with self.lock:
-            robot_id = msg.robot_id
-            
-            # Update last heartbeat time
-            self.last_heartbeat_time[robot_id] = time.time()
-            
-            # If robot was suspected, clear suspicion
-            if self.robot_statuses.get(robot_id, 0) == 1:
-                self.robot_statuses[robot_id] = 0
-                self.get_logger().info(f'Robot {robot_id} heartbeat resumed, clearing suspicion')
-    
+        robot_id = msg.robot_id
+        
+        # Update last heartbeat time
+        self.last_heartbeat_time[robot_id] = time.time()
+        
+        # If robot was suspected, clear suspicion
+        if self.robot_statuses.get(robot_id, 0) == 1:  # 1 = suspected
+            self.robot_statuses[robot_id] = 0  # 0 = normal
+            self.get_logger().info(f'Robot {robot_id} heartbeat resumed, clearing suspicion')
+        
     def robot_state_callback(self, msg):
         """Process robot state updates"""
-        with self.lock:
-            robot_id = msg.id
+        robot_id = msg.id
+        
+        # If robot reports as failed
+        if msg.failed:
+            self.robot_statuses[robot_id] = 2  # 2 = failed
+            self.failed_robots.add(robot_id)
             
-            # If robot reports as failed
-            if msg.failed:
-                self.robot_statuses[robot_id] = 2  # Mark as failed
-                self.failed_robots.add(robot_id)
-                
-                if not self.recovery_mode:
-                    self.get_logger().info(f'Robot {robot_id} reported failure, initiating recovery')
-                    self.initiate_recovery(robot_id)
+            if not self.recovery_mode:
+                self.get_logger().info(f'Robot {robot_id} reported failure, initiating recovery')
+                self.initiate_recovery(robot_id)
     
     def assignment_callback(self, msg):
         """Monitor assignment changes to detect recovery completion"""
-        with self.lock:
-            if not self.recovery_mode:
-                return
+        if not self.recovery_mode:
+            return
+        
+        # Check if all tasks have been reassigned
+        all_reassigned = True
+        for i in range(len(msg.task_ids)):
+            task_id = msg.task_ids[i]
+            robot_id = msg.robot_ids[i]
             
-            # Check if all tasks have been reassigned
-            all_reassigned = True
-            for i in range(len(msg.task_ids)):
-                task_id = msg.task_ids[i]
-                robot_id = msg.robot_ids[i]
-                
-                # If task is assigned to a failed robot or marked for recovery
-                if robot_id in self.failed_robots or robot_id == -1:
-                    all_reassigned = False
-                    break
+            # If task is assigned to a failed robot or marked for recovery
+            if robot_id in self.failed_robots or robot_id == -1:
+                all_reassigned = False
+                break
+        
+        if all_reassigned:
+            self.recovery_complete_time = time.time()
+            recovery_duration = self.recovery_complete_time - self.recovery_start_time
             
-            if all_reassigned:
-                self.recovery_complete_time = time.time()
-                recovery_duration = self.recovery_complete_time - self.recovery_start_time
-                
-                self.get_logger().info(
-                    f'Recovery complete after {recovery_duration:.2f} seconds')
-                self.recovery_mode = False
+            self.get_logger().info(
+                f'Recovery complete after {recovery_duration:.2f} seconds')
+            self.recovery_mode = False  # Set to false when complete
                 
     def monitor_callback(self):
         """Monitor for failures based on heartbeats and progress"""

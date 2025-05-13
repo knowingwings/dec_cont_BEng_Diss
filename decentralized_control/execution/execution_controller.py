@@ -301,6 +301,34 @@ class ExecutionController(Node):
         self.get_logger().info(
             f'Execution controller initialized for robot {self.robot_id}')
     
+    def joint_state_callback(self, msg):
+        """Process joint state updates."""
+        with self.lock:
+            # Extract joint positions for the manipulator
+            if len(msg.position) >= 5:  # Ensure we have enough joints
+                for i in range(min(5, len(msg.position))):
+                    self.joint_positions[i] = msg.position[i]
+
+    def pose_callback(self, msg):
+        """Process pose updates."""
+        with self.lock:
+            # Extract position
+            self.position[0] = msg.pose.position.x
+            self.position[1] = msg.pose.position.y
+            self.position[2] = msg.pose.position.z
+            
+            # Extract orientation as Euler angles
+            # This is a simplified conversion from quaternion to Euler
+            # In a real implementation, would use quaternion to Euler conversion
+            qx = msg.pose.orientation.x
+            qy = msg.pose.orientation.y
+            qz = msg.pose.orientation.z
+            qw = msg.pose.orientation.w
+            
+            # Convert quaternion to Euler angles (yaw only for simplicity)
+            self.orientation[2] = np.arctan2(2.0 * (qw * qz + qx * qy),
+                                            1.0 - 2.0 * (qy * qy + qz * qz))
+
     def task_callback(self, msg):
         """Process incoming task information"""
         with self.task_lock:
@@ -389,31 +417,21 @@ class ExecutionController(Node):
             
             self.get_logger().info(f'Starting execution of task {self.current_task.id}')
     
-    def publish_state(self):
-        """Publish robot state information"""
-        with self.state_lock, self.task_lock:
-            msg = RobotState()
-            msg.robot_id = self.robot_id
-            msg.position = self.position.tolist()
-            msg.orientation = self.orientation.tolist()
-            msg.capabilities = self.capabilities.tolist()
-            
-            # Calculate workload based on remaining tasks
-            workload = 0.0
-            for task in self.assigned_tasks:
-                workload += task.execution_time
-            if self.current_task:
-                workload += self.current_task.execution_time * (1.0 - self.task_progress)
-            msg.workload = workload
-            
-            msg.failed = self.failed
-            msg.executing = self.executing
-            msg.collaborating = self.collaborating
-            
-            if self.current_task:
-                msg.current_task_id = self.current_task.id
-            
-            self.state_publisher.publish(msg)
+    
+def publish_state(self):
+    """Publish robot state information."""
+    with self.lock:
+        msg = RobotState()
+        msg.id = self.robot_id  # Use 'id' instead of 'robot_id'
+        msg.position = self.position.tolist()
+        msg.orientation = self.orientation.tolist()
+        
+        # Add other state information
+        msg.capabilities = self.capabilities.tolist()
+        msg.workload = self.calculate_workload()
+        msg.failed = self.failed
+        
+        self.state_publisher.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)

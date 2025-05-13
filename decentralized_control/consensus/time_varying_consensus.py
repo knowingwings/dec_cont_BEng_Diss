@@ -93,6 +93,37 @@ class TimeVaryingConsensusNode(Node):
         self.get_logger().info(
             f'Time-varying consensus node initialized for Robot {self.robot_id}')
     
+    def configure(self, delay_mean=0.0, delay_stddev=0.0, packet_loss=0.0):
+        """
+        Configure network conditions for testing adaptability.
+        
+        Parameters:
+        -----------
+        delay_mean : float
+            Mean communication delay in seconds
+        delay_stddev : float
+            Standard deviation of communication delay
+        packet_loss : float
+            Probability of packet loss (0.0-1.0)
+        """
+        with self.lock:
+            # Update parameters
+            self.max_delay = max(0.5, delay_mean * 3)  # Adaptive maximum delay
+            
+            # Update convergence rate estimation based on network conditions
+            # Higher delays and packet loss reduce effective algebraic connectivity
+            effective_connectivity = self.algebraic_connectivity
+            if hasattr(self, 'algebraic_connectivity'):
+                degradation_factor = 1.0 / (1.0 + delay_mean * 5 + packet_loss * 10)
+                effective_connectivity = self.algebraic_connectivity * degradation_factor
+                
+                if effective_connectivity > 0:
+                    self.convergence_rate = -np.log(1 - self.gamma * effective_connectivity)
+                    
+                    self.get_logger().info(
+                        f'Network conditions updated: delay={delay_mean}±{delay_stddev}s, '
+                        f'packet_loss={packet_loss}, convergence_rate={self.convergence_rate:.4f}')
+
     def state_callback(self, msg):
         """Store state information from other robots with timestamp."""
         with self.lock:

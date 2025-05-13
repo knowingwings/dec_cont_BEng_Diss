@@ -93,6 +93,48 @@ class CommunicationMiddleware(Node):
         
         return base_delay/1000.0
     
+    def simulate_constraints(self, publisher, msg, topic_type):
+        """
+        Apply simulated communication constraints to a message.
+        
+        Parameters:
+        -----------
+        publisher : rclpy.publisher.Publisher
+            The publisher to use for the message
+        msg : Any
+            The message to publish
+        topic_type : type
+            The type of the message
+        
+        Returns:
+        --------
+        bool
+            True if the message was queued (not lost), False otherwise
+        """
+        # Simulate packet loss
+        if random.random() < self.packet_loss_prob:
+            return False  # Message lost
+        
+        # Simulate delay
+        if self.delay_mean > 0 or self.delay_stddev > 0:
+            # Generate delay from log-normal distribution (more realistic for network delays)
+            delay = np.random.lognormal(mean=np.log(self.delay_mean) if self.delay_mean > 0 else -5, 
+                                    sigma=self.delay_stddev if self.delay_stddev > 0 else 0.1)
+            delay = max(0.001, delay)  # Ensure minimum delay
+            
+            # Queue message for delayed publishing
+            delivery_time = time.time() + delay
+            
+            with self.queue_lock:
+                self.message_queue.append((delivery_time, publisher, msg, topic_type))
+                self.message_queue = deque(sorted(self.message_queue, key=lambda x: x[0]))
+            
+            return True  # Message queued
+        else:
+            # No delay, publish immediately
+            publisher.publish(msg)
+            return True  # Message published
+    
     def simulate_message_delivery(self, topic_name, msg, publisher):
         """Simulate network effects on message delivery."""
         # Check for packet loss

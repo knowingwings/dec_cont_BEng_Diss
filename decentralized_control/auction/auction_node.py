@@ -173,11 +173,12 @@ class AuctionNode(Node):
         self.bids[(robot_id, task_id)] = bid_value
         
         # Update utility
-        self.utilities[(robot_id, task_id)] = bid_value - self.prices[task_id]
+        self.utilities[(robot_id, task_id)] = bid_value - self.prices.get(task_id, 0.0)
         
-        # Process bid
-        self.process_bid(robot_id, task_id, bid_value)
-    
+        # Process bid (make sure task_id exists in self.prices before processing)
+        if task_id in self.prices:
+            self.process_bid(robot_id, task_id, bid_value)
+        
     def assignment_callback(self, msg):
         """Process task assignment updates"""
         if self.failed:
@@ -582,7 +583,7 @@ class AuctionNode(Node):
         if task_id not in self.prices:
             return  # Task doesn't exist in our database
         
-        old_assignment = self.assignments[task_id]
+        old_assignment = self.assignments.get(task_id, 0)
         
         # Calculate utility
         utility = bid_value - self.prices[task_id]
@@ -598,7 +599,7 @@ class AuctionNode(Node):
             self.prices[task_id] += self.epsilon
             
             # If this is the first assignment, record it for recovery analysis
-            if self.initial_assignments[task_id] == 0:
+            if task_id not in self.initial_assignments or self.initial_assignments[task_id] == 0:
                 self.initial_assignments[task_id] = robot_id
             
             # Publish updated assignments

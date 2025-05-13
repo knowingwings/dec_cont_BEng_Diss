@@ -78,6 +78,7 @@ class ComparativeAnalysis(Node):
     def allocation_callback(self):
         """Perform allocation based on selected method."""
         if not self.tasks:
+            self.get_logger().warn("No tasks available for allocation")
             return
         
         start_time = time.time()
@@ -93,6 +94,11 @@ class ComparativeAnalysis(Node):
             assignments = self.sequential_allocation()
         else:
             self.get_logger().error(f'Unknown allocation method: {self.allocation_method}')
+            return
+        
+        # Ensure assignments is not empty
+        if not assignments:
+            self.get_logger().warn("No assignments produced by allocation method")
             return
         
         # Compute allocation time
