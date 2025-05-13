@@ -27,14 +27,18 @@ find_package(turtlebot3_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(Eigen3 REQUIRED)
 
-# Check for open_manipulator_msgs
-set(HAVE_OPEN_MANIPULATOR FALSE)
+# Check for OpenMANIPULATOR dependencies
+set(HAVE_OPEN_MANIPULATOR TRUE)
 find_package(open_manipulator_msgs QUIET)
-if(open_manipulator_msgs_FOUND)
-  set(HAVE_OPEN_MANIPULATOR TRUE)
+find_package(open_manipulator_x_libs QUIET)
+find_package(open_manipulator_x_description QUIET)
+
+if(open_manipulator_msgs_FOUND AND open_manipulator_x_libs_FOUND)
+  message(STATUS "OpenMANIPULATOR packages found, building with manipulator support")
   add_definitions(-DHAVE_OPEN_MANIPULATOR)
 else()
-  message(STATUS "open_manipulator_msgs not found. Building without manipulator support.")
+  message(STATUS "OpenMANIPULATOR packages not found, building without manipulator support")
+  set(HAVE_OPEN_MANIPULATOR FALSE)
   add_definitions(-DNO_OPEN_MANIPULATOR)
 endif()
 
@@ -76,8 +80,8 @@ add_library(robot_components
 # Add library for task management components
 add_library(task_components
   src/task/task_manager.cpp
-  # Update this line if the filename is different
   src/task/dependency_manager.cpp
+  # Add task_representation.cpp if you have this file
 )
 
 # Add library for utility components
@@ -95,7 +99,7 @@ ament_target_dependencies(auction_components
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_components
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator_msgs
+    turtlebot3_msgs open_manipulator_msgs open_manipulator_x_libs
   )
 else()
   ament_target_dependencies(robot_components
@@ -130,7 +134,7 @@ ament_target_dependencies(auction_node
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_node
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator_msgs
+    turtlebot3_msgs open_manipulator_msgs open_manipulator_x_libs
   )
 else()
   ament_target_dependencies(robot_node
