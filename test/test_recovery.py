@@ -15,10 +15,13 @@ class TestRecovery(unittest.TestCase):
         rclpy.init()
         cls.recovery_node1 = RecoveryNode()
         cls.recovery_node2 = RecoveryNode()
-        
-        # Override parameters
+          # Override parameters
         cls.recovery_node1.robot_id = 1
         cls.recovery_node2.robot_id = 2
+        
+        # Set shorter timeouts for testing
+        cls.recovery_node1.heartbeat_timeout = 1.0  # 1 second timeout
+        cls.recovery_node2.heartbeat_timeout = 1.0
         
         # Reduce heartbeat timeout for faster testing
         cls.recovery_node1.heartbeat_timeout = 0.5
@@ -186,7 +189,7 @@ class TestRecovery(unittest.TestCase):
         # Verify recovery is complete
         self.assertFalse(self.recovery_node1.recovery_mode)
         self.assertNotEqual(self.recovery_node1.recovery_complete_time, 0)
-    
+        
     def test_recovery_timeout(self):
         """Test recovery timing measurement."""
         # Reset recovery state
@@ -194,20 +197,44 @@ class TestRecovery(unittest.TestCase):
         self.recovery_node1.recovery_start_time = 0
         self.recovery_node1.recovery_complete_time = 0
         
-        # Trigger recovery
-        self.recovery_node1.initiate_recovery(2)
+        # Initialize some fake robot status
+        self.recovery_node1.robot_statuses[2] = 0  # Mark robot 2 as normal
+        self.recovery_node1.last_heartbeat_time[2] = time.time()  # Set initial heartbeat time
         
-        # Verify recovery started
+        # Let the monitor run for a while to detect timeout
+        start_time = time.time()
+        timeout_duration = self.recovery_node1.heartbeat_timeout + 2.0  # Add buffer
+        
+        # Spin node until timeout is detected or max time reached
+        while time.time() - start_time < timeout_duration:
+            rclpy.spin_once(self.recovery_node1, timeout_sec=0.1)
+            if 2 in self.recovery_node1.failed_robots:
+                break
+        
+        # Verify robot 2 was detected as failed
+        self.assertIn(2, self.recovery_node1.failed_robots)
+        self.assertEqual(self.recovery_node1.robot_statuses[2], 2)  # Should be marked as failed
+        
+        # Now verify recovery process
         self.assertTrue(self.recovery_node1.recovery_mode)
         self.assertNotEqual(self.recovery_node1.recovery_start_time, 0)
         
-        # Create task assignment with all tasks reassigned
+        # Create and publish task assignment to complete recovery
         assignment = TaskAssignment()
         assignment.task_ids = [1, 2, 3]
         assignment.robot_ids = [1, 1, 1]  # All tasks reassigned to robot 1
         assignment.prices = [0.0, 0.0, 0.0]
         
         self.task_assign_publisher.publish(assignment)
+        
+        # Wait for recovery to complete
+        start_time = time.time()
+        while self.recovery_node1.recovery_mode and time.time() - start_time < 5.0:
+            rclpy.spin_once(self.recovery_node1, timeout_sec=0.1)
+            
+        # Verify recovery completed
+        self.assertFalse(self.recovery_node1.recovery_mode)
+        self.assertNotEqual(self.recovery_node1.recovery_complete_time, 0)
         
         # Wait for assignment to be processed
         time.sleep(0.1)

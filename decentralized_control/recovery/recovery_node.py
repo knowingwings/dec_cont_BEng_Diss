@@ -126,7 +126,7 @@ class RecoveryNode(Node):
                 self.get_logger().info(
                     f'Recovery complete after {recovery_duration:.2f} seconds')
                 self.recovery_mode = False
-    
+                
     def monitor_callback(self):
         """Monitor for failures based on heartbeats and progress"""
         with self.lock:
@@ -139,12 +139,13 @@ class RecoveryNode(Node):
                     continue
                 
                 # Check if heartbeat timeout exceeded
-                if current_time - last_time > self.heartbeat_timeout:
+                timeout_duration = current_time - last_time
+                if timeout_duration > self.heartbeat_timeout:
                     if self.robot_statuses.get(robot_id, 0) == 0:
                         # Mark as suspected
                         self.robot_statuses[robot_id] = 1
                         self.get_logger().warn(
-                            f'Robot {robot_id} heartbeat timeout, marking as suspected')
+                            f'Robot {robot_id} heartbeat timeout ({timeout_duration:.1f}s), marking as suspected')
                     elif self.robot_statuses.get(robot_id, 0) == 1:
                         # Mark as failed
                         self.robot_statuses[robot_id] = 2
