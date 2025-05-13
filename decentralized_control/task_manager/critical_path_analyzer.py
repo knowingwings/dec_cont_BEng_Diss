@@ -9,7 +9,7 @@ from collections import defaultdict, deque
 import time
 from threading import Lock
 
-from decentralized_control.msg import Task, TaskList, TaskPriority, TaskAssignment
+from dec_control.msg import Task, TaskList, TaskPriority, TaskAssignment
 
 class CriticalPathAnalyzer(Node):
     """

@@ -9,8 +9,8 @@ import time
 from threading import Lock
 from enum import Enum
 
-from decen_control.msg import Task, TaskList, TaskAssignment, CollaborationRequest
-from decen_control.msg import CollaborationResponse, SynchronizationSignal
+from dec_control.msg import Task, TaskList, TaskAssignment, CollaborationRequest
+from dec_control.msg import CollaborationResponse, SynchronizationSignal
 
 class State(Enum):
     """States for the timed automaton."""

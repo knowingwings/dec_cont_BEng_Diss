@@ -8,7 +8,7 @@ import numpy as np
 import time
 from threading import Lock
 
-from decentralized_control.msg import RobotState, TaskAssignment, CapabilityUpdate, RecoveryStatus
+from dec_control.msg import RobotState, TaskAssignment, CapabilityUpdate, RecoveryStatus
 
 class PartialFailureRecoveryNode(Node):
     """

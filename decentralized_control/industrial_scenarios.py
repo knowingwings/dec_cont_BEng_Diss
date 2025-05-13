@@ -7,7 +7,7 @@ import os
 import yaml
 import rclpy
 from rclpy.node import Node
-from decentralized_control.msg import Task, TaskList
+from dec_control.msg import Task, TaskList
 
 class IndustrialScenarioGenerator(Node):
     """
