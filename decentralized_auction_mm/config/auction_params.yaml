@@ -1,0 +1,62 @@
+/**
+ * Auction Parameters Configuration File
+ * 
+ * This file contains the parameters for the distributed auction algorithm
+ * as described in the dissertation "Employing a distributed auction algorithm
+ * in decentralised mobile manipulators for independent and collaborative
+ * assembly tasks"
+ */
+
+auction:
+  # Minimum bid increment (epsilon)
+  # Controls convergence speed vs. solution quality trade-off
+  # Lower values give better solutions but slower convergence
+  # Range: 0.01 - 0.5, Default: 0.05
+  epsilon: 0.05
+  
+  # Bid calculation weights (alpha)
+  # These parameters weight different factors in bid calculation
+  # alpha1: Distance factor (higher = more emphasis on travel distance)
+  # alpha2: Configuration cost (higher = more emphasis on manipulator configuration)
+  # alpha3: Capability matching (higher = more emphasis on robot capabilities)
+  # alpha4: Workload balancing (higher = more emphasis on even distribution)
+  # alpha5: Energy consumption (higher = more emphasis on energy efficiency)
+  alpha1: 0.8
+  alpha2: 0.3
+  alpha3: 1.0
+  alpha4: 1.2
+  alpha5: 0.2
+  
+  # Consensus parameters
+  # gamma: Base weight factor for information from other robots (0.0 - 1.0)
+  # lambda: Information decay rate for time-weighted consensus (0.0 - 1.0)
+  gamma: 0.5
+  lambda: 0.1
+  
+  # Recovery parameters (beta)
+  # These parameters weight different factors in recovery bid calculation
+  # beta1: Progress term (higher = more emphasis on task progress)
+  # beta2: Criticality term (higher = more emphasis on task criticality)
+  # beta3: Urgency term (higher = more emphasis on task urgency)
+  beta1: 2.0
+  beta2: 1.5
+  beta3: 1.0
+  
+  # Communication parameters
+  # These parameters model realistic communication constraints
+  # comm_delay: Communication delay in milliseconds (0 - 500)
+  # packet_loss_prob: Probability of packet loss (0.0 - 0.5)
+  comm_delay: 50
+  packet_loss_prob: 0.1
+  
+  # Auction system parameters
+  # heartbeat_rate: Rate of heartbeat messages in Hz (0.5 - 10.0)
+  # auction_rate: Rate of auction iterations in Hz (1.0 - 10.0)
+  heartbeat_rate: 1.0
+  auction_rate: 5.0
+  
+  # Failure simulation parameters
+  # fail_robot_id: ID of robot to simulate failure (0 = no failure)
+  # fail_time: Time to simulate failure in seconds (0 = no failure)
+  fail_robot_id: 0
+  fail_time: 0.0

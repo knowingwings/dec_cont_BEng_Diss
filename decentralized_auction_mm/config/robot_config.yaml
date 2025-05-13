@@ -1,0 +1,65 @@
+/**
+ * Robot Configuration File
+ * 
+ * This file contains the parameters for the TurtleBot3 Waffle Pi with
+ * OpenMANIPULATOR-X, as used in the decentralized auction system.
+ */
+
+robot:
+  # Basic robot parameters
+  # robot_id: Unique identifier for the robot
+  # robot_name: Name of the robot for ROS topics/TF
+  robot_id: 1
+  robot_name: "robot1"
+  
+  # Robot capabilities
+  # Vector of capabilities (for bid calculation)
+  # [Payload capacity, Positioning accuracy, Force control, Tool availability, Sensors]
+  # Values should be normalized to [0.0 - 2.0] where 1.0 is standard capability
+  capabilities: [1.1, 0.9, 1.0, 0.8, 1.2]
+  
+  # Mobile base parameters
+  # These parameters define the TurtleBot3 Waffle Pi behavior
+  max_linear_vel: 0.26  # m/s
+  max_angular_vel: 1.82  # rad/s
+  wheel_radius: 0.033  # m
+  wheel_separation: 0.287  # m
+  
+  # PID control parameters for mobile base movement
+  linear_kp: 1.0
+  linear_ki: 0.0
+  linear_kd: 0.1
+  angular_kp: 2.0
+  angular_ki: 0.0
+  angular_kd: 0.2
+  
+  # Position tolerance for navigation
+  position_tolerance: 0.05  # m
+  orientation_tolerance: 0.1  # rad
+  
+  # Manipulator parameters
+  # These parameters define the OpenMANIPULATOR-X behavior
+  manipulator_dof: 4
+  gripper_effort: 0.5
+  joint_velocity_limit: 0.5  # rad/s
+  
+  # End-effector position tolerance for manipulation
+  ee_position_tolerance: 0.005  # m
+  ee_orientation_tolerance: 0.05  # rad
+  
+  # Task execution parameters
+  execution_velocity_scale: 0.5  # Scale factor for motion during task execution
+  execution_acceleration_scale: 0.3  # Scale factor for acceleration during task execution
+  
+  # Synchronization parameters for collaborative tasks
+  sync_timeout: 5.0  # Timeout for synchronization in seconds
+  sync_retry_count: 3  # Number of retries for synchronization
+  
+  # Controller update rates (Hz)
+  controller_rate: 20.0  # Hz
+  position_control_rate: 50.0  # Hz
+  velocity_control_rate: 20.0  # Hz
+  
+  # Safety parameters
+  collision_distance: 0.1  # Minimum distance to obstacles in meters
+  emergency_stop_threshold: 0.05  # Distance threshold for emergency stop

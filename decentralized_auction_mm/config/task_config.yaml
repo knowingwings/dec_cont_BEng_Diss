@@ -1,0 +1,58 @@
+/**
+ * Task Configuration File
+ * 
+ * This file contains the parameters for the task generator, which creates
+ * assembly tasks for the decentralized auction system.
+ */
+
+task_generator:
+  # Task generation parameters
+  num_tasks: 10  # Number of tasks to generate
+  workspace_size: [4.0, 4.0]  # Size of workspace in meters [width, height]
+  min_task_spacing: 0.5  # Minimum distance between tasks in meters
+  
+  # Task dependency parameters
+  dependency_probability: 0.3  # Probability of adding a dependency between tasks
+  max_dependencies_per_task: 3  # Maximum number of dependencies per task
+  dependency_mode: "spatial"  # How to generate dependencies: "spatial", "random", or "structured"
+  
+  # Task execution parameters
+  min_execution_time: 5.0  # Minimum task execution time in seconds
+  max_execution_time: 15.0  # Maximum task execution time in seconds
+  collaborative_task_ratio: 0.2  # Fraction of tasks that require collaboration
+  
+  # Task capability requirements
+  # Generate capability requirements for tasks with different patterns
+  # Each pattern corresponds to a category of tasks:
+  # - Type 1: Strong in capabilities 1, 3 (precision tasks)
+  # - Type 2: Strong in capabilities 2, 4 (force tasks)
+  # - Type 3: Balanced requirements (general tasks)
+  capability_patterns:
+    - [0.8, 0.4, 0.6, 0.2, 0.3]  # Type 1 (precision tasks)
+    - [0.3, 0.9, 0.2, 0.8, 0.4]  # Type 2 (force tasks)
+    - [0.5, 0.5, 0.7, 0.5, 0.9]  # Type 3 (general tasks)
+  
+  # Task visualization parameters
+  task_marker_scale: 0.1  # Size of task marker visualization
+  task_marker_colors:
+    pending: [0.5, 0.5, 0.5, 0.8]  # Gray
+    assigned: [0.0, 0.0, 1.0, 0.8]  # Blue
+    in_progress: [1.0, 0.5, 0.0, 0.8]  # Orange
+    completed: [0.0, 1.0, 0.0, 0.8]  # Green
+    failed: [1.0, 0.0, 0.0, 0.8]  # Red
+  
+  # Task generation modes
+  # "random": Random generation in the workspace
+  # "grid": Grid-based generation
+  # "clustered": Generate tasks in clusters
+  generation_mode: "grid"
+  
+  # Grid generation parameters (if generation_mode = "grid")
+  grid_rows: 3
+  grid_cols: 4
+  grid_jitter: 0.2  # Random jitter to add variation to grid positions
+  
+  # Dynamic task generation
+  dynamic_generation: false  # Whether to generate tasks dynamically during execution
+  generation_interval: 30.0  # Time interval between dynamic task generation (seconds)
+  max_total_tasks: 20  # Maximum number of tasks to generate in total

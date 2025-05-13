@@ -1,0 +1,4 @@
+# StartAuction.srv - Service to start the auction
+---
+bool success
+string message

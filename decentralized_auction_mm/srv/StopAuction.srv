@@ -1,0 +1,4 @@
+# StopAuction.srv - Service to stop the auction
+---
+bool success
+string message

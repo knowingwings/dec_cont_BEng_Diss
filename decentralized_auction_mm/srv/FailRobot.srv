@@ -1,0 +1,5 @@
+# FailRobot.srv - Service to simulate a robot failure
+uint32 robot_id   # ID of the robot to fail
+---
+bool success
+string message
