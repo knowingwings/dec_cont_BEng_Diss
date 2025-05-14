@@ -26,19 +26,21 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(turtlebot3_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(open_manipulator REQUIRED)
 
-# Find MoveIt packages
+# Find OpenManipulator packages - Use QUIET to avoid errors if not found
+find_package(open_manipulator QUIET)
+find_package(open_manipulator_msgs QUIET)
 find_package(moveit_ros_planning_interface QUIET)
 find_package(open_manipulator_x_bringup QUIET)
 
 # Check for OpenMANIPULATOR dependencies
-if(moveit_ros_planning_interface_FOUND AND open_manipulator_x_bringup_FOUND)
+if(moveit_ros_planning_interface_FOUND AND open_manipulator_x_bringup_FOUND AND 
+   open_manipulator_FOUND AND open_manipulator_msgs_FOUND)
   message(STATUS "OpenMANIPULATOR and MoveIt packages found, building with manipulator support")
   set(HAVE_OPEN_MANIPULATOR TRUE)
   add_definitions(-DHAVE_OPEN_MANIPULATOR)
 else()
-  message(STATUS "OpenMANIPULATOR or MoveIt packages not found, building without manipulator support")
+  message(STATUS "OpenMANIPULATOR or dependent packages not found, building without manipulator support")
   set(HAVE_OPEN_MANIPULATOR FALSE)
   add_definitions(-DNO_OPEN_MANIPULATOR)
 endif()
@@ -139,90 +141,4 @@ endforeach()
 # Include directories for executables to find message headers
 foreach(target auction_node robot_node task_generator_node)
   target_include_directories(${target} PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>"
-  )
-endforeach()
-
-# FOURTH: Now add dependencies to each target
-ament_target_dependencies(auction_components
-  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros
-)
-
-# Conditionally add dependencies based on available packages
-if(HAVE_OPEN_MANIPULATOR)
-  ament_target_dependencies(robot_components
-    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator_msgs
-  )
-else()
-  ament_target_dependencies(robot_components
-    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs
-  )
-endif()
-
-ament_target_dependencies(task_components
-  rclcpp std_msgs geometry_msgs
-)
-
-ament_target_dependencies(util_components
-  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_geometry_msgs
-)
-
-# Link dependencies to executables
-ament_target_dependencies(auction_node
-  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros
-)
-
-if(HAVE_OPEN_MANIPULATOR)
-  ament_target_dependencies(robot_node
-    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator
-  )
-else()
-  ament_target_dependencies(robot_node
-    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs
-  )
-endif()
-
-ament_target_dependencies(task_generator_node
-  rclcpp std_msgs geometry_msgs
-)
-
-# Install targets
-install(TARGETS
-  auction_components
-  robot_components
-  task_components
-  util_components
-  auction_node
-  robot_node
-  task_generator_node
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
-
-# Install include directory
-install(DIRECTORY include/
-  DESTINATION include
-)
-
-# Install launch and config files
-install(DIRECTORY
-  launch
-  config
-  worlds
-  models
-  DESTINATION share/${PROJECT_NAME}/
-)
-
-# Install Python scripts
-install(PROGRAMS
-  scripts/visualize_results.py
-  scripts/generate_tasks.py
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-ament_package()
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator
