@@ -12,8 +12,8 @@
 #include <geometry_msgs/msg/twist.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
-#include <tf2_ros/transform_listener.hpp>
-#include <tf2_ros/buffer.hpp>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_ros/buffer.h>
 
 // Include OpenManipulator headers conditionally
 #ifdef HAVE_OPEN_MANIPULATOR
