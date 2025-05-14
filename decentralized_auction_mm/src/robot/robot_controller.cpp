@@ -8,18 +8,18 @@ namespace decentralized_auction_mm {
 namespace robot {
 
 RobotController::RobotController(
-    uint32_t robot_id,
-    rclcpp::Node* node,
-    const std::map<std::string, double>& params)
-    : robot_id_(robot_id),
-      node_(node),
-      params_(params),
-      initialized_(false),
-      failed_(false),
-      executing_task_(false),
-      task_progress_(0.0),
-      heartbeat_(0),
-      logger_(node->get_logger())
+        uint32_t robot_id,
+        rclcpp::Node* node,
+        const std::map<std::string, double>& params)
+        : robot_id_(robot_id),
+          node_(node),
+          params_(params),
+          initialized_(false),
+          failed_(false),
+          executing_task_(false),
+          heartbeat_(0),        // Changed order to match declaration
+          task_progress_(0.0),  // Changed order to match declaration
+          logger_(node->get_logger())
 {
     // Initialize capability vector
     capabilities_ = {1.0, 1.0, 1.0, 1.0, 1.0};  // Default balanced capabilities
@@ -271,6 +271,8 @@ bool RobotController::moveToPosition(const geometry_msgs::msg::Point& target) {
 }
 
 bool RobotController::configureManipulator(const msg::Task& task) {
+    (void)task;  // Suppress unused parameter warning
+    
     if (!initialized_ || failed_) {
         return false;
     }
