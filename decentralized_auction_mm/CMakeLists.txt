@@ -26,7 +26,7 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(turtlebot3_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(open_manipulator_msgs REQUIRED)
+find_package(open_manipulator REQUIRED)
 
 # Check for OpenMANIPULATOR dependencies
 if(open_manipulator_msgs_FOUND)
