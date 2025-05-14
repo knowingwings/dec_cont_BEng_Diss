@@ -16,9 +16,8 @@
 #include <tf2_ros/buffer.h>
 
 // Include OpenManipulator headers conditionally
-// Include OpenManipulator headers conditionally
 #ifdef HAVE_OPEN_MANIPULATOR
-#include <open_manipulator/msg/open_manipulator_state.hpp>
+#include <open_manipulator_msgs/msg/open_manipulator_state.hpp>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #endif
