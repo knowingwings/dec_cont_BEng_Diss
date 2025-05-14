@@ -28,15 +28,31 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(open_manipulator REQUIRED)
 
+# Find MoveIt packages
+find_package(moveit_ros_planning_interface QUIET)
+find_package(open_manipulator_x_bringup QUIET)
+
 # Check for OpenMANIPULATOR dependencies
-if(open_manipulator_msgs_FOUND)
-  message(STATUS "OpenMANIPULATOR packages found, building with manipulator support")
+if(moveit_ros_planning_interface_FOUND AND open_manipulator_x_bringup_FOUND)
+  message(STATUS "OpenMANIPULATOR and MoveIt packages found, building with manipulator support")
   set(HAVE_OPEN_MANIPULATOR TRUE)
   add_definitions(-DHAVE_OPEN_MANIPULATOR)
 else()
-  message(STATUS "OpenMANIPULATOR packages not found, building without manipulator support")
+  message(STATUS "OpenMANIPULATOR or MoveIt packages not found, building without manipulator support")
   set(HAVE_OPEN_MANIPULATOR FALSE)
   add_definitions(-DNO_OPEN_MANIPULATOR)
+endif()
+
+# Update dependencies for robot components
+if(HAVE_OPEN_MANIPULATOR)
+  ament_target_dependencies(robot_components
+    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
+    moveit_ros_planning_interface
+  )
+else()
+  ament_target_dependencies(robot_components
+    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
+  )
 endif()
 
 # Generate custom messages - FIRST STEP TO ENSURE AVAILABILITY

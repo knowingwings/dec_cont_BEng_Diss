@@ -90,32 +90,23 @@ bool MobileManipulator::initialize() {
         "joint_states", 10, std::bind(&MobileManipulator::jointStateCallback, this, std::placeholders::_1));
     
 #ifdef HAVE_OPEN_MANIPULATOR
-    manipulator_state_sub_ = node_->create_subscription<open_manipulator_msgs::msg::OpenManipulatorState>(
-        "open_manipulator_x_controller/state", 10, 
-        std::bind(&MobileManipulator::manipulatorStateCallback, this, std::placeholders::_1));
-    
-    // Create service clients
-    set_joint_position_client_ = node_->create_client<open_manipulator_msgs::srv::SetJointPosition>(
-        "open_manipulator_x_controller/set_joint_position");
-    
-    set_kinematics_pose_client_ = node_->create_client<open_manipulator_msgs::srv::SetKinematicsPose>(
-        "open_manipulator_x_controller/set_kinematics_pose");
-    
-    // Wait for services to be available
-    while (!set_joint_position_client_->wait_for_service(std::chrono::seconds(1))) {
-        if (!rclcpp::ok()) {
-            RCLCPP_ERROR(logger_, "Interrupted while waiting for service");
-            return false;
-        }
-        RCLCPP_INFO(logger_, "Waiting for set_joint_position service...");
-    }
-    
-    while (!set_kinematics_pose_client_->wait_for_service(std::chrono::seconds(1))) {
-        if (!rclcpp::ok()) {
-            RCLCPP_ERROR(logger_, "Interrupted while waiting for service");
-            return false;
-        }
-        RCLCPP_INFO(logger_, "Waiting for set_kinematics_pose service...");
+    // Initialize MoveIt interfaces
+    try {
+        // Allow time for node initialization
+        RCLCPP_INFO(logger_, "Waiting for MoveIt to initialize...");
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        
+        // Create MoveGroup instances
+        move_group_arm_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(
+            node_, "arm");
+        move_group_gripper_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(
+            node_, "gripper");
+        planning_scene_interface_ = std::make_shared<moveit::planning_interface::PlanningSceneInterface>();
+        
+        RCLCPP_INFO(logger_, "MoveIt initialization successful");
+    } catch (const std::exception& e) {
+        RCLCPP_ERROR(logger_, "MoveIt initialization failed: %s", e.what());
+        return false;
     }
 #endif
     
@@ -126,7 +117,7 @@ bool MobileManipulator::initialize() {
     tf_buffer_ = std::make_shared<tf2_ros::Buffer>(node_->get_clock());
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
     
-    RCLCPP_INFO(logger_, "Mobile manipulator services connected");
+    RCLCPP_INFO(logger_, "Mobile manipulator initialization complete");
     
     // Mark as initialized
     initialized_ = true;
@@ -197,39 +188,58 @@ bool MobileManipulator::setJointPositions(const std::vector<double>& joint_posit
     }
     
 #ifdef HAVE_OPEN_MANIPULATOR
-    if (joint_positions.size() != 4) {
-        RCLCPP_ERROR(logger_, "Expected 4 joint positions for OpenMANIPULATOR-X, got %zu", 
-                  joint_positions.size());
+    try {
+        if (joint_positions.size() != 4) {
+            RCLCPP_ERROR(logger_, "Expected 4 joint positions for OpenMANIPULATOR-X, got %zu", 
+                        joint_positions.size());
+            return false;
+        }
+        
+        // Set joint targets using MoveIt
+        move_group_arm_->setJointValueTarget({
+            joint_positions[0], joint_positions[1], joint_positions[2], joint_positions[3]
+        });
+        
+        // Create a plan
+        moveit::planning_interface::MoveGroupInterface::Plan plan;
+        bool success = static_cast<bool>(move_group_arm_->plan(plan));
+        
+        if (success) {
+            // Execute the plan
+            move_group_arm_->execute(plan);
+            
+            // Store target positions
+            target_joint_positions_ = joint_positions;
+            has_joint_target_ = true;
+            manipulator_moving_ = true;
+            
+            RCLCPP_INFO(logger_, "Setting joint positions to [%.2f, %.2f, %.2f, %.2f]", 
+                     joint_positions[0], joint_positions[1], joint_positions[2], joint_positions[3]);
+                     
+            return true;
+        } else {
+            RCLCPP_ERROR(logger_, "Failed to plan trajectory for joint positions");
+            return false;
+        }
+    } catch (const std::exception& e) {
+        RCLCPP_ERROR(logger_, "MoveIt error: %s", e.what());
         return false;
     }
-    
-    auto request = std::make_shared<open_manipulator_msgs::srv::SetJointPosition::Request>();
-    
-    // Set joint names and positions
-    request->joint_position.joint_name = {"joint1", "joint2", "joint3", "joint4"};
-    request->joint_position.position = {
-        joint_positions[0], joint_positions[1], joint_positions[2], joint_positions[3]
-    };
-    
-    // Set path time (time to reach target position)
-    request->path_time = 2.0;  // 2 seconds
-    
-    // Send request asynchronously
-    auto result_future = set_joint_position_client_->async_send_request(request);
-#endif
-    
+#else
+    // Simulation of success for when MoveIt is not available
     // Store target positions
     target_joint_positions_ = joint_positions;
     has_joint_target_ = true;
     manipulator_moving_ = true;
     
-    RCLCPP_INFO(logger_, "Setting joint positions to [%.2f, %.2f, %.2f, %.2f]", 
+    RCLCPP_INFO(logger_, "Simulation: Setting joint positions to [%.2f, %.2f, %.2f, %.2f]", 
              joint_positions[0], joint_positions[1], joint_positions[2], joint_positions[3]);
-    
+             
     return true;
+#endif
 }
 
-bool MobileManipulator::setEndEffectorPose(const geometry_msgs::msg::Pose& pose) {
+bbool MobileManipulator::setEndEffectorPose(const geometry_msgs::msg::Pose& pose) {
     std::lock_guard<std::mutex> lock(mutex_);
     
     if (!initialized_) {
@@ -238,28 +248,47 @@ bool MobileManipulator::setEndEffectorPose(const geometry_msgs::msg::Pose& pose)
     }
     
 #ifdef HAVE_OPEN_MANIPULATOR
-    auto request = std::make_shared<open_manipulator_msgs::srv::SetKinematicsPose::Request>();
-    
-    // Set end effector name and pose
-    request->end_effector_name = "gripper";
-    request->kinematics_pose.pose = pose;
-    
-    // Set path time (time to reach target pose)
-    request->path_time = 2.0;  // 2 seconds
-    
-    // Send request asynchronously
-    auto result_future = set_kinematics_pose_client_->async_send_request(request);
-#endif
-    
+    try {
+        // Set pose target using MoveIt
+        move_group_arm_->setPoseTarget(pose);
+        
+        // Create a plan
+        moveit::planning_interface::MoveGroupInterface::Plan plan;
+        bool success = static_cast<bool>(move_group_arm_->plan(plan));
+        
+        if (success) {
+            // Execute the plan
+            move_group_arm_->execute(plan);
+            
+            // Store target pose
+            target_ee_pose_ = pose;
+            has_ee_target_ = true;
+            manipulator_moving_ = true;
+            
+            RCLCPP_INFO(logger_, "Setting end effector pose to [%.2f, %.2f, %.2f]", 
+                     pose.position.x, pose.position.y, pose.position.z);
+                     
+            return true;
+        } else {
+            RCLCPP_ERROR(logger_, "Failed to plan trajectory for end effector pose");
+            return false;
+        }
+    } catch (const std::exception& e) {
+        RCLCPP_ERROR(logger_, "MoveIt error: %s", e.what());
+        return false;
+    }
+#else
+    // Simulation of success for when MoveIt is not available
     // Store target pose
     target_ee_pose_ = pose;
     has_ee_target_ = true;
     manipulator_moving_ = true;
     
-    RCLCPP_INFO(logger_, "Setting end effector pose to [%.2f, %.2f, %.2f]", 
+    RCLCPP_INFO(logger_, "Simulation: Setting end effector pose to [%.2f, %.2f, %.2f]", 
              pose.position.x, pose.position.y, pose.position.z);
-    
+             
     return true;
+#endif
 }
 
 bool MobileManipulator::executeTrajectory(const std::vector<geometry_msgs::msg::Pose>& waypoints) {
@@ -284,22 +313,38 @@ bool MobileManipulator::controlGripper(bool open) {
     }
     
 #ifdef HAVE_OPEN_MANIPULATOR
-    auto request = std::make_shared<open_manipulator_msgs::srv::SetJointPosition::Request>();
-    
-    // Set gripper position based on open/close
-    double position = open ? 0.01 : -0.01;
-    
-    request->joint_position.joint_name = {"gripper"};
-    request->joint_position.position = {position};
-    request->path_time = 1.0;  // 1 second
-    
-    // Send request asynchronously
-    auto result_future = set_joint_position_client_->async_send_request(request);
-#endif
-    
-    RCLCPP_INFO(logger_, "Setting gripper to %s", open ? "open" : "close");
+    try {
+        // Set gripper position using MoveIt
+        // Typical joint limits for OpenManipulator gripper: [0.0, 0.01]
+        double position = open ? 0.01 : 0.0;
+        
+        move_group_gripper_->setJointValueTarget("gripper", position);
+        
+        // Create a plan
+        moveit::planning_interface::MoveGroupInterface::Plan plan;
+        bool success = static_cast<bool>(move_group_gripper_->plan(plan));
+        
+        if (success) {
+            // Execute the plan
+            move_group_gripper_->execute(plan);
+            
+            RCLCPP_INFO(logger_, "Setting gripper to %s", open ? "open" : "close");
+            
+            return true;
+        } else {
+            RCLCPP_ERROR(logger_, "Failed to plan trajectory for gripper");
+            return false;
+        }
+    } catch (const std::exception& e) {
+        RCLCPP_ERROR(logger_, "MoveIt error: %s", e.what());
+        return false;
+    }
+#else
+    // Simulation of success for when MoveIt is not available
+    RCLCPP_INFO(logger_, "Simulation: Setting gripper to %s", open ? "open" : "close");
     
     return true;
+#endif
 }
 
 geometry_msgs::msg::Pose MobileManipulator::getBasePose() const {

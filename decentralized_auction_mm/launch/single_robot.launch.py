@@ -1,10 +1,20 @@
 import os
 from ament_index_python.packages import get_package_share_directory
+import subprocess
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction
-from launch.substitutions import LaunchConfiguration, TextSubstitution, PythonExpression
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node, PushRosNamespace
+
+def package_exists(package_name):
+    """Check if a ROS package exists."""
+    try:
+        subprocess.check_call(['ros2', 'pkg', 'list', '-q', package_name], 
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 def generate_launch_description():
     # Get package directory
@@ -22,12 +32,12 @@ def generate_launch_description():
     robot_config_file = os.path.join(pkg_dir, 'config', 'robot_config.yaml')
     auction_params_file = os.path.join(pkg_dir, 'config', 'auction_params.yaml')
     
-    # Create action to launch the robot nodes within a namespace
-    launch_robot_nodes = GroupAction([
+    # Create list of nodes
+    nodes = [
         # Push robot namespace
         PushRosNamespace(robot_name),
         
-        # Spawn TurtleBot3 with OpenMANIPULATOR-X
+        # Spawn TurtleBot3
         Node(
             package='gazebo_ros',
             executable='spawn_entity.py',
@@ -46,27 +56,7 @@ def generate_launch_description():
             output='screen'
         ),
         
-        # Spawn OpenMANIPULATOR-X on TurtleBot3
-        Node(
-            package='gazebo_ros',
-            executable='spawn_entity.py',
-            name='spawn_manipulator',
-            arguments=[
-                '-entity', [robot_name, '_manipulator'],
-                '-file', os.path.join(get_package_share_directory('open_manipulator_x_description'), 
-                                     'urdf', 'open_manipulator.urdf'),
-                '-x', x_pos,
-                '-y', y_pos,
-                '-z', PythonExpression([str(0.15), ' + float("', z_pos, '")']),
-                '-R', '0.0',
-                '-P', '0.0',
-                '-Y', '0.0',
-                '-reference_frame', [robot_name, '::base_link'],
-            ],
-            output='screen'
-        ),
-        
-        # Robot controller nodes
+        # Robot state publisher
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
@@ -84,15 +74,6 @@ def generate_launch_description():
             output='screen'
         ),
         
-        # OpenMANIPULATOR-X controllers - MODERN approach
-        Node(
-            package='open_manipulator_x_bringup',
-            executable='open_manipulator_x_bringup',
-            name='open_manipulator_x_bringup',
-            parameters=[{'use_sim_time': use_sim_time}],
-            output='screen'
-        ),
-        
         # Auction robot node
         Node(
             package='decentralized_auction_mm',
@@ -106,7 +87,40 @@ def generate_launch_description():
             ],
             output='screen'
         ),
-    ])
+    ]
+    
+    # Conditionally add OpenManipulator nodes
+    if (package_exists('open_manipulator_x_description')):
+        # Fix for string concatenation issue
+        manipulator_entity = [robot_name, '_manipulator']
+        reference_frame = [robot_name, '::base_link']
+        
+        # Calculate Z position (base Z + 0.15)
+        manipulator_z = PythonExpression([str(0.15), ' + float("', z_pos, '")'])
+        
+        nodes.append(
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                name='spawn_manipulator',
+                arguments=[
+                    '-entity', manipulator_entity,
+                    '-file', os.path.join(get_package_share_directory('open_manipulator_x_description'), 
+                                         'urdf', 'open_manipulator.urdf'),
+                    '-x', x_pos,
+                    '-y', y_pos,
+                    '-z', manipulator_z,
+                    '-R', '0.0',
+                    '-P', '0.0',
+                    '-Y', '0.0',
+                    '-reference_frame', reference_frame
+                ],
+                output='screen'
+            )
+        )
+    
+    # Create action to launch the robot nodes within a namespace
+    launch_robot_nodes = GroupAction(nodes)
     
     # Create the launch description
     return LaunchDescription([

@@ -18,8 +18,8 @@
 // Include OpenManipulator headers conditionally
 #ifdef HAVE_OPEN_MANIPULATOR
 #include <open_manipulator_msgs/msg/open_manipulator_state.hpp>
-#include <open_manipulator_msgs/srv/set_joint_position.hpp>
-#include <open_manipulator_msgs/srv/set_kinematics_pose.hpp>
+#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
 #endif
 
 namespace decentralized_auction_mm {
