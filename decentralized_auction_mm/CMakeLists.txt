@@ -26,7 +26,6 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(turtlebot3_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(open_manipulator REQUIRED)
 
 # Find MoveIt packages
 find_package(moveit_ros_planning_interface QUIET)
@@ -67,7 +66,7 @@ find_package(gazebo REQUIRED)
 include_directories(
   include
   ${EIGEN3_INCLUDE_DIRS}
-  ${GAZEBO_INCLUDE_DIRS}
+  ${GAZEBO_LIBRARY_DIRS}
 )
 link_directories(${GAZEBO_LIBRARY_DIRS})
 
@@ -152,7 +151,7 @@ ament_target_dependencies(auction_components
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_components
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator
+    turtlebot3_msgs moveit_ros_planning_interface
   )
 else()
   ament_target_dependencies(robot_components
@@ -177,7 +176,7 @@ ament_target_dependencies(auction_node
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_node
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator
+    turtlebot3_msgs moveit_ros_planning_interface
   )
 else()
   ament_target_dependencies(robot_node
