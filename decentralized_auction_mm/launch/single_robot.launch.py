@@ -84,11 +84,11 @@ def generate_launch_description():
             output='screen'
         ),
         
-        # OpenMANIPULATOR-X controllers
+        # OpenMANIPULATOR-X controllers - MODERN approach
         Node(
-            package='open_manipulator_x_controller',
-            executable='open_manipulator_x_controller',
-            name='open_manipulator_x_controller',
+            package='open_manipulator_x_bringup',
+            executable='open_manipulator_x_bringup',
+            name='open_manipulator_x_bringup',
             parameters=[{'use_sim_time': use_sim_time}],
             output='screen'
         ),
