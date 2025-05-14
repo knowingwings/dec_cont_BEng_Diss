@@ -3,7 +3,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction
-from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch.substitutions import LaunchConfiguration, TextSubstitution, PythonExpression
 from launch_ros.actions import Node, PushRosNamespace
 
 def generate_launch_description():
@@ -57,7 +57,7 @@ def generate_launch_description():
                                      'urdf', 'open_manipulator.urdf'),
                 '-x', x_pos,
                 '-y', y_pos,
-                '-z', TextSubstitution(text=str(float(z_pos.perform(None)) + 0.15)),  # Add offset for mounting on TurtleBot
+                '-z', PythonExpression([str(0.15), ' + float("', z_pos, '")']),
                 '-R', '0.0',
                 '-P', '0.0',
                 '-Y', '0.0',
