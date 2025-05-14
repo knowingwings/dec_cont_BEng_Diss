@@ -141,4 +141,90 @@ endforeach()
 # Include directories for executables to find message headers
 foreach(target auction_node robot_node task_generator_node)
   target_include_directories(${target} PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>"
+  )
+endforeach()
+
+# FOURTH: Now add dependencies to each target
+ament_target_dependencies(auction_components
+  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros
+)
+
+# Conditionally add dependencies based on available packages
+if(HAVE_OPEN_MANIPULATOR)
+  ament_target_dependencies(robot_components
+    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
+    turtlebot3_msgs open_manipulator open_manipulator_msgs
+  )
+else()
+  ament_target_dependencies(robot_components
+    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
+    turtlebot3_msgs
+  )
+endif()
+
+ament_target_dependencies(task_components
+  rclcpp std_msgs geometry_msgs
+)
+
+ament_target_dependencies(util_components
+  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_geometry_msgs
+)
+
+# Link dependencies to executables
+ament_target_dependencies(auction_node
+  rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros
+)
+
+if(HAVE_OPEN_MANIPULATOR)
+  ament_target_dependencies(robot_node
+    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
+    turtlebot3_msgs open_manipulator open_manipulator_msgs
+  )
+else()
+  ament_target_dependencies(robot_node
+    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
+    turtlebot3_msgs
+  )
+endif()
+
+ament_target_dependencies(task_generator_node
+  rclcpp std_msgs geometry_msgs
+)
+
+# Install targets
+install(TARGETS
+  auction_components
+  robot_components
+  task_components
+  util_components
+  auction_node
+  robot_node
+  task_generator_node
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install include directory
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# Install launch and config files
+install(DIRECTORY
+  launch
+  config
+  worlds
+  models
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+# Install Python scripts
+install(PROGRAMS
+  scripts/visualize_results.py
+  scripts/generate_tasks.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+ament_package()
