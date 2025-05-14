@@ -25,6 +25,10 @@ AuctionAlgorithm::AuctionAlgorithm(
     consensus_protocol_ = std::make_unique<ConsensusProtocol>(robot_id, params);
     recovery_mechanism_ = std::make_unique<RecoveryMechanism>(robot_id, params);
 
+    // Initialize robot_failed_ map for all robots with default value false
+    robot_failed_[1] = false;
+    robot_failed_[2] = false;
+
     RCLCPP_INFO(logger_, "Auction algorithm initialized for robot %d", robot_id);
 }
 
@@ -136,7 +140,7 @@ std::vector<msg::Bid> AuctionAlgorithm::calculateBids(const std::vector<uint32_t
     // Calculate total workload for each robot (including our robot)
     std::map<uint32_t, double> robot_workloads;
     for (const auto& [robot_id, status] : robot_status_) {
-        if (!robot_failed_.at(robot_id)) {
+        if (robot_failed_.count(robot_id) > 0 && !robot_failed_.at(robot_id)) {
             robot_workloads[robot_id] = status.current_workload;
         }
     }
@@ -150,7 +154,7 @@ std::vector<msg::Bid> AuctionAlgorithm::calculateBids(const std::vector<uint32_t
     double min_workload = std::numeric_limits<double>::max();
     double max_workload = 0.0;
     for (const auto& [robot_id, workload] : robot_workloads) {
-        if (!robot_failed_.at(robot_id)) {
+        if (robot_failed_.count(robot_id) > 0 && !robot_failed_.at(robot_id)) {
             min_workload = std::min(min_workload, workload);
             max_workload = std::max(max_workload, workload);
         }
@@ -167,7 +171,11 @@ std::vector<msg::Bid> AuctionAlgorithm::calculateBids(const std::vector<uint32_t
     }
     
     // Calculate adaptive epsilon based on iteration
-    double base_epsilon = params_.at("epsilon");
+    double base_epsilon = 0.05; // Default value
+    if (params_.count("epsilon") > 0) {
+        base_epsilon = params_.at("epsilon");
+    }
+    
     if (iteration_ < 10) {
         base_epsilon *= 1.5; // Higher initial epsilon to prevent oscillations
     }
@@ -249,7 +257,7 @@ bool AuctionAlgorithm::updateAssignments(const std::vector<msg::Bid>& bids) {
     double workload_ratio = 1.0;
     double max_workload = 0.0;
     for (const auto& [robot_id, status] : robot_status_) {
-        if (!robot_failed_.at(robot_id)) {
+        if (robot_failed_.count(robot_id) > 0 && !robot_failed_.at(robot_id)) {
             max_workload = std::max(max_workload, status.current_workload);
         }
     }
@@ -311,8 +319,14 @@ bool AuctionAlgorithm::updateAssignments(const std::vector<msg::Bid>& bids) {
             }
             
             // Dynamic price increment with multiple factors
-            double effective_epsilon = iteration_ < 10 ? 
-                params_.at("epsilon") * 1.5 : params_.at("epsilon");
+            double effective_epsilon = 0.05; // Default value
+            if (params_.count("epsilon") > 0) {
+                effective_epsilon = params_.at("epsilon");
+            }
+            
+            if (iteration_ < 10) {
+                effective_epsilon *= 1.5; // Higher initial epsilon to prevent oscillations
+            }
             
             // Factor 1: Task oscillation history
             if (task_oscillation_count_.at(bid.task_id) > 2) {
@@ -368,15 +382,12 @@ void AuctionAlgorithm::processBid(const msg::Bid& bid) {
     std::lock_guard<std::mutex> lock(mutex_);
     
     // Ignore bids from failed robots
-    if (robot_failed_.find(bid.robot_id) != robot_failed_.end() && robot_failed_.at(bid.robot_id)) {
+    if (robot_failed_.count(bid.robot_id) > 0 && robot_failed_.at(bid.robot_id)) {
         return;
     }
     
-    // Ignore outdated bids (from previous iterations)
-    // This would require adding an iteration field to the Bid message
-    
     // Check if the bid is higher than the current price
-    if (task_prices_.find(bid.task_id) != task_prices_.end() && 
+    if (task_prices_.count(bid.task_id) > 0 && 
         bid.bid_value > task_prices_.at(bid.task_id)) {
         uint32_t old_assignment = task_assignments_.at(bid.task_id);
         
@@ -509,7 +520,7 @@ bool AuctionAlgorithm::processRecoveryStep(const std::vector<uint32_t>& availabl
     bool all_reassigned = true;
     for (const auto& [task_id, robot_id] : task_assignments_) {
         // Check if task was assigned to the failed robot at time of failure
-        if (initial_assignments_.at(task_id) == failed_robot_id_) {
+        if (initial_assignments_.count(task_id) > 0 && initial_assignments_.at(task_id) == failed_robot_id_) {
             // If still unassigned or assigned to failed robot, not all reassigned
             if (robot_id == 0 || robot_id == failed_robot_id_) {
                 all_reassigned = false;
@@ -530,7 +541,7 @@ bool AuctionAlgorithm::processRecoveryStep(const std::vector<uint32_t>& availabl
     for (uint32_t task_id : available_tasks) {
         // Only consider tasks that were assigned to the failed robot
         // or unassigned tasks that are available
-        if (initial_assignments_.at(task_id) == failed_robot_id_ || 
+        if ((initial_assignments_.count(task_id) > 0 && initial_assignments_.at(task_id) == failed_robot_id_) || 
             task_assignments_.at(task_id) == 0) {
             recovery_tasks.push_back(task_id);
         }
@@ -605,7 +616,7 @@ double AuctionAlgorithm::getCurrentWorkload() const {
     
     double workload = 0.0;
     for (const auto& task : tasks_) {
-        if (task_assignments_.find(task.id) != task_assignments_.end() &&
+        if (task_assignments_.count(task.id) > 0 &&
             task_assignments_.at(task.id) == robot_id_) {
             workload += task.execution_time;
         }
@@ -657,7 +668,7 @@ msg::AuctionStatus AuctionAlgorithm::getAuctionStatus() const {
     // Calculate global makespan
     std::map<uint32_t, double> robot_makespans;
     for (const auto& [robot_id, robot_status] : robot_status_) {
-        if (!robot_failed_.at(robot_id)) {
+        if (robot_failed_.count(robot_id) > 0 && !robot_failed_.at(robot_id)) {
             robot_makespans[robot_id] = 0.0;
         }
     }
@@ -669,10 +680,10 @@ msg::AuctionStatus AuctionAlgorithm::getAuctionStatus() const {
     
     // Calculate makespan for each robot
     for (const auto& task : tasks_) {
-        if (task_assignments_.find(task.id) != task_assignments_.end()) {
+        if (task_assignments_.count(task.id) > 0) {
             uint32_t robot_id = task_assignments_.at(task.id);
-            if (robot_id > 0 && robot_makespans.find(robot_id) != robot_makespans.end() &&
-                !robot_failed_.at(robot_id)) {
+            if (robot_id > 0 && robot_makespans.count(robot_id) > 0 &&
+                (robot_failed_.count(robot_id) == 0 || !robot_failed_.at(robot_id))) {
                 robot_makespans[robot_id] += task.execution_time;
             }
         }
@@ -694,8 +705,12 @@ std::vector<msg::Task> AuctionAlgorithm::getCurrentTasks() const {
     std::vector<msg::Task> current_tasks = tasks_;
     
     for (auto& task : current_tasks) {
-        task.current_price = task_prices_.at(task.id);
-        task.assigned_robot = task_assignments_.at(task.id);
+        if (task_prices_.count(task.id) > 0) {
+            task.current_price = task_prices_.at(task.id);
+        }
+        if (task_assignments_.count(task.id) > 0) {
+            task.assigned_robot = task_assignments_.at(task.id);
+        }
     }
     
     return current_tasks;

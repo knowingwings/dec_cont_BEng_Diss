@@ -14,9 +14,13 @@
 #include <sensor_msgs/msg/joint_state.hpp>
 #include <tf2_ros/transform_listener.hpp>
 #include <tf2_ros/buffer.hpp>
+
+// Include OpenManipulator headers conditionally
+#ifdef HAVE_OPEN_MANIPULATOR
 #include <open_manipulator_msgs/msg/open_manipulator_state.hpp>
 #include <open_manipulator_msgs/srv/set_joint_position.hpp>
 #include <open_manipulator_msgs/srv/set_kinematics_pose.hpp>
+#endif
 
 namespace decentralized_auction_mm {
 namespace robot {
@@ -138,12 +142,14 @@ private:
      */
     void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr msg);
 
+#ifdef HAVE_OPEN_MANIPULATOR
     /**
      * @brief Callback for manipulator state messages
      * @param msg The manipulator state message
      */
     void manipulatorStateCallback(
         const open_manipulator_msgs::msg::OpenManipulatorState::SharedPtr msg);
+#endif
 
     /**
      * @brief Calculate velocity command for base movement
@@ -204,14 +210,17 @@ private:
     // ROS subscribers
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_;
+    
+#ifdef HAVE_OPEN_MANIPULATOR
     rclcpp::Subscription<open_manipulator_msgs::msg::OpenManipulatorState>::SharedPtr manipulator_state_sub_;
-
-    // ROS publishers
-    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
 
     // ROS service clients
     rclcpp::Client<open_manipulator_msgs::srv::SetJointPosition>::SharedPtr set_joint_position_client_;
     rclcpp::Client<open_manipulator_msgs::srv::SetKinematicsPose>::SharedPtr set_kinematics_pose_client_;
+#endif
+
+    // ROS publishers
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
 
     // TF2 buffer and listener
     std::shared_ptr<tf2_ros::Buffer> tf_buffer_;

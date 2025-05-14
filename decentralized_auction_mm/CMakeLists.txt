@@ -26,14 +26,12 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(turtlebot3_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(open_manipulator_msgs REQUIRED)
 
 # Check for OpenMANIPULATOR dependencies
-set(HAVE_OPEN_MANIPULATOR FALSE)
-message(STATUS "Building without OpenMANIPULATOR support")
-add_definitions(-DNO_OPEN_MANIPULATOR)
-
-if(open_manipulator_msgs_FOUND AND open_manipulator_x_libs_FOUND)
+if(open_manipulator_msgs_FOUND)
   message(STATUS "OpenMANIPULATOR packages found, building with manipulator support")
+  set(HAVE_OPEN_MANIPULATOR TRUE)
   add_definitions(-DHAVE_OPEN_MANIPULATOR)
 else()
   message(STATUS "OpenMANIPULATOR packages not found, building without manipulator support")
