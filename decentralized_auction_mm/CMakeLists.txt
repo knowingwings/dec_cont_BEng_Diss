@@ -152,7 +152,7 @@ ament_target_dependencies(auction_components
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_components
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    turtlebot3_msgs open_manipulator_msgs
+    turtlebot3_msgs open_manipulator
   )
 else()
   ament_target_dependencies(robot_components
