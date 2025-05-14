@@ -214,9 +214,10 @@ private:
 #ifdef HAVE_OPEN_MANIPULATOR
     rclcpp::Subscription<open_manipulator_msgs::msg::OpenManipulatorState>::SharedPtr manipulator_state_sub_;
 
-    // ROS service clients
-    rclcpp::Client<open_manipulator_msgs::srv::SetJointPosition>::SharedPtr set_joint_position_client_;
-    rclcpp::Client<open_manipulator_msgs::srv::SetKinematicsPose>::SharedPtr set_kinematics_pose_client_;
+    // MoveIt interfaces
+    std::shared_ptr<moveit::planning_interface::MoveGroupInterface> move_group_arm_;
+    std::shared_ptr<moveit::planning_interface::MoveGroupInterface> move_group_gripper_;
+    std::shared_ptr<moveit::planning_interface::PlanningSceneInterface> planning_scene_interface_;
 #endif
 
     // ROS publishers
