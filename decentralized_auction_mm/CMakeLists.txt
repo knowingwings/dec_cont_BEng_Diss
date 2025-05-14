@@ -43,18 +43,6 @@ else()
   add_definitions(-DNO_OPEN_MANIPULATOR)
 endif()
 
-# Update dependencies for robot components
-if(HAVE_OPEN_MANIPULATOR)
-  ament_target_dependencies(robot_components
-    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-    moveit_ros_planning_interface
-  )
-else()
-  ament_target_dependencies(robot_components
-    rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
-  )
-endif()
-
 # Generate custom messages - FIRST STEP TO ENSURE AVAILABILITY
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Task.msg"
@@ -83,7 +71,7 @@ include_directories(
 )
 link_directories(${GAZEBO_LIBRARY_DIRS})
 
-# Add library for auction algorithm components
+# FIRST: Add all libraries
 add_library(auction_components
   src/auction/auction_algorithm.cpp
   src/auction/bid_calculator.cpp
@@ -91,32 +79,55 @@ add_library(auction_components
   src/auction/recovery_mechanism.cpp
 )
 
-# Add library for robot control components
 add_library(robot_components
   src/robot/robot_controller.cpp
   src/robot/task_executor.cpp
   src/robot/mobile_manipulator.cpp
 )
 
-# Add library for task management components
 add_library(task_components
   src/task/task_manager.cpp
   src/task/dependency_manager.cpp
   src/task/task_representation.cpp
 )
 
-# Add library for utility components
 add_library(util_components
   src/util/communication.cpp
   src/util/math_utils.cpp
   src/util/visualization.cpp
 )
 
-# CRITICAL: Add dependency to message generation for each component
+# SECOND: Add all executables
+add_executable(auction_node src/nodes/auction_node.cpp)
+add_executable(robot_node src/nodes/robot_node.cpp)
+add_executable(task_generator_node src/nodes/task_generator_node.cpp)
+
+# THIRD: Add message dependencies to all components
 target_link_libraries(auction_components "${cpp_typesupport_target}")
 target_link_libraries(robot_components "${cpp_typesupport_target}")
 target_link_libraries(task_components "${cpp_typesupport_target}")
 target_link_libraries(util_components "${cpp_typesupport_target}")
+
+# Link executables with their components
+target_link_libraries(auction_node 
+  auction_components 
+  util_components
+  "${cpp_typesupport_target}"
+)
+
+target_link_libraries(robot_node 
+  robot_components 
+  auction_components 
+  task_components 
+  util_components
+  "${cpp_typesupport_target}"
+)
+
+target_link_libraries(task_generator_node 
+  task_components 
+  util_components
+  "${cpp_typesupport_target}"
+)
 
 # Make sure the generated message headers are included for each component
 foreach(target auction_components robot_components task_components util_components)
@@ -125,11 +136,19 @@ foreach(target auction_components robot_components task_components util_componen
   )
 endforeach()
 
-# Link dependencies
+# Include directories for executables to find message headers
+foreach(target auction_node robot_node task_generator_node)
+  target_include_directories(${target} PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>"
+  )
+endforeach()
+
+# FOURTH: Now add dependencies to each target
 ament_target_dependencies(auction_components
   rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros
 )
 
+# Conditionally add dependencies based on available packages
 if(HAVE_OPEN_MANIPULATOR)
   ament_target_dependencies(robot_components
     rclcpp geometry_msgs sensor_msgs nav_msgs tf2 tf2_ros tf2_geometry_msgs
@@ -149,37 +168,6 @@ ament_target_dependencies(task_components
 ament_target_dependencies(util_components
   rclcpp std_msgs geometry_msgs visualization_msgs tf2 tf2_geometry_msgs
 )
-
-# Add executables for ROS nodes
-add_executable(auction_node src/nodes/auction_node.cpp)
-target_link_libraries(auction_node 
-  auction_components 
-  util_components
-  "${cpp_typesupport_target}"
-)
-
-add_executable(robot_node src/nodes/robot_node.cpp)
-target_link_libraries(robot_node 
-  robot_components 
-  auction_components 
-  task_components 
-  util_components
-  "${cpp_typesupport_target}"
-)
-
-add_executable(task_generator_node src/nodes/task_generator_node.cpp)
-target_link_libraries(task_generator_node 
-  task_components 
-  util_components
-  "${cpp_typesupport_target}"
-)
-
-# Include directories for executables to find message headers
-foreach(target auction_node robot_node task_generator_node)
-  target_include_directories(${target} PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>"
-  )
-endforeach()
 
 # Link dependencies to executables
 ament_target_dependencies(auction_node
