@@ -52,7 +52,7 @@ def generate_launch_description():
             executable='spawn_entity.py',
             name='spawn_manipulator',
             arguments=[
-                '-entity', robot_name + '_manipulator',
+                '-entity', [robot_name, '_manipulator'],
                 '-file', os.path.join(get_package_share_directory('open_manipulator_x_description'), 
                                      'urdf', 'open_manipulator.urdf'),
                 '-x', x_pos,
@@ -61,7 +61,7 @@ def generate_launch_description():
                 '-R', '0.0',
                 '-P', '0.0',
                 '-Y', '0.0',
-                '-reference_frame', robot_name + '::base_link'
+                '-reference_frame', [robot_name, '::base_link'],
             ],
             output='screen'
         ),
